@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/collaborators",
+	"title": "Collaborators",
+	"category": "lc-bot2026",
+	"icon": "groups",
+	"description": "The organisations Back on Track works with, from Site-Wide Settings. Replaces the old partner carousel.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "Our collaborators" },
+		"intro": { "type": "string", "default": "" },
+		"surface": { "type": "string", "default": "surface" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

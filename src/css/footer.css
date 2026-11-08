@@ -1,0 +1,103 @@
+#footer {
+	position: relative;
+	padding-top: var(--section-pad);
+
+	/* Brush edge painted over whatever sits above the footer */
+	&::before {
+		content: "";
+		position: absolute;
+		inset: auto 0 100%;
+		height: var(--edge-height);
+		background: var(--col-brand);
+		transform: scaleY(-1);
+		-webkit-mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+
+	& a {
+		color: var(--col-white);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--col-accent);
+			text-decoration: underline;
+		}
+	}
+}
+
+.footer__grid {
+	display: grid;
+	gap: var(--space-5);
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 800px) {
+	.footer__grid {
+		grid-template-columns: 2fr 1fr 1fr;
+	}
+}
+
+.footer__logo {
+	margin-bottom: var(--space-3);
+}
+
+.footer__heading {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-base);
+	font-weight: var(--fw-700);
+	color: var(--col-accent);
+	margin-bottom: var(--space-2);
+}
+
+.footer__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	& li + li {
+		margin-top: var(--space-2);
+	}
+}
+
+/* Accreditation logos: a quiet row of white marks above the colophon */
+.footer__accreditations {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-4) var(--space-5);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+
+	& img {
+		width: auto;
+		height: clamp(2.25rem, 1.5rem + 2vw, 3.25rem);
+		max-width: 11rem;
+		object-fit: contain;
+		opacity: 0.85;
+		transition: opacity var(--transition);
+	}
+	& a:hover img,
+	& a:focus-visible img {
+		opacity: 1;
+	}
+}
+
+#colophon {
+	margin-top: var(--space-5);
+	padding-block: var(--space-3);
+	border-top: 1px solid var(--col-brand-mid);
+	font-size: var(--fs-small);
+
+	& p {
+		margin: 0;
+	}
+}
+
+/* The footer's brush edge paints over the bottom of the last section, so give
+   that section room and keep its text clear of the stroke. */
+#main > :last-child {
+	padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap));
+}

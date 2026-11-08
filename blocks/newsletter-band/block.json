@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/newsletter-band",
+	"title": "Newsletter Sign-up",
+	"category": "lc-bot2026",
+	"icon": "email-alt",
+	"description": "A panel with the Mailchimp sign-up form (Mailchimp for WP). Replaces sign_up_cta.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"formId": { "type": "number", "default": 0 },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "Stay in the loop" },
+		"text": { "type": "string", "default": "Hear about new hikes first. Our newsletter goes out when there is something worth walking to." },
+		"surface": { "type": "string", "default": "brand" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

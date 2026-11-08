@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/tile-links",
+	"title": "Tile Links",
+	"category": "lc-bot2026",
+	"icon": "screenoptions",
+	"description": "A row of image tiles that link to pages. Replaces 4_col_nav_blocks.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "" },
+		"surface": { "type": "string", "default": "surface" },
+		"tileRatio": { "type": "string", "default": "landscape" },
+		"tiles": { "type": "array", "default": [] }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

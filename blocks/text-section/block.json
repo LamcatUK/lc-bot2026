@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/text-section",
+	"title": "Text Section",
+	"category": "lc-bot2026",
+	"icon": "text-page",
+	"description": "Title and rich text on a chosen surface. Replaces title_text and full_width_text.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "" },
+		"content": { "type": "string", "default": "" },
+		"surface": { "type": "string", "default": "surface" },
+		"align": { "type": "string", "default": "left" },
+		"brushEdge": { "type": "boolean", "default": false }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

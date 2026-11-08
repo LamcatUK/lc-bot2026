@@ -1,0 +1,143 @@
+@font-face {
+	font-family: "Montserrat";
+	font-weight: 400;
+	font-display: swap;
+	src: url("../fonts/montserrat-400.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Montserrat";
+	font-weight: 700;
+	font-display: swap;
+	src: url("../fonts/montserrat-700.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Lemonado";
+	font-weight: 400;
+	font-display: swap;
+	src: url("../fonts/lemonado-script-textured.woff2") format("woff2");
+}
+
+body {
+	font-kerning: normal;
+	text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-family-display);
+	font-weight: var(--fw-400);
+	letter-spacing: -0.01em;
+	text-wrap: balance;
+}
+
+h4,
+h5,
+h6 {
+	font-weight: var(--fw-700);
+	line-height: 1.25;
+}
+
+p,
+li {
+	max-width: var(--measure);
+}
+
+.lead {
+	font-size: var(--fs-lead);
+	line-height: 1.5;
+}
+
+a {
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 0.08em;
+}
+
+/* Brush image mask. Placeholder shape, swap the SVG in img/brush/ later. */
+.brush-photo {
+	-webkit-mask: url("../img/brush/brush-photo.svg") center / 100% 100% no-repeat;
+	mask: url("../img/brush/brush-photo.svg") center / 100% 100% no-repeat;
+}
+
+/* Brush section edge: add to a dark section, it paints the next surface over the bottom. */
+.brush-edge {
+	position: relative;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: auto 0 -1px;
+		height: var(--edge-height);
+		background: var(--edge-colour, var(--col-surface));
+		transform: scaleY(-1);
+		-webkit-mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+}
+
+/* Pill label: short script text on a brush stroke. */
+.pill {
+	display: inline-block;
+	position: relative;
+	isolation: isolate;
+	padding: 0.55em 1.6em 0.65em;
+	font-family: var(--font-family-display);
+	font-size: var(--fs-h3);
+	line-height: 1.05;
+	color: var(--col-brand);
+	transform: rotate(-3deg);
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: -0.25em -0.5em;
+		z-index: -1;
+		background: var(--col-wash);
+		-webkit-mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+	}
+}
+
+/* Section surfaces shared by every block via data-surface */
+[data-surface="surface"] { --surface-bg: var(--col-surface); background: var(--surface-bg); color: var(--col-ink); }
+[data-surface="tint"] { --surface-bg: var(--col-tint); background: var(--surface-bg); color: var(--col-ink); }
+[data-surface="soft"] { --surface-bg: var(--col-wash-soft); background: var(--surface-bg); color: var(--col-ink); }
+[data-surface="brand"] { --surface-bg: var(--col-brand); background: var(--surface-bg); color: var(--col-white); --edge-colour: var(--col-surface); }
+
+/* Brush edge on the TOP of any block: the block paints its own colour up over
+   the bottom of whatever sits above it, so no colour needs choosing. The
+   section above keeps its own bottom padding, which is deeper than the edge's
+   rough zone, so its content stays clear. */
+.brush-top {
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: auto 0 calc(100% - 1px);
+		height: var(--edge-height);
+		background: var(--surface-bg);
+		transform: scaleY(-1);
+		-webkit-mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+}
+
+[data-surface="brand"] .pill { color: var(--col-brand); }
+.section { display: flow-root; padding-block: var(--section-pad); } /* flow-root: a last paragraph's margin can't escape and leave a strip when padding is trimmed */
+/* Brush edges. A stroke paints up over the bottom of the block it sits on, so that
+   block needs extra bottom padding or its content ends up under the brush. Both
+   cases are found automatically: a block followed by a brush-top block, and a
+   block with its own brush edge (the hero). The brush itself marks the break, so
+   the block below it needs less top padding. */
+.section:has(+ .brush-top),
+.section.brush-edge { padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap)); }
+.section.brush-top { padding-top: calc(var(--section-pad) * 0.4); }
+.brush-edge + .section { padding-top: calc(var(--section-pad) * 0.6); }
+/* Per-block spacing choices (Space above / Space below in the editor) */
+.section.space-top-small { padding-top: calc(var(--section-pad) * 0.4); }
+.section.space-top-none { padding-top: 0; }
+.section.space-bottom-small { padding-bottom: calc(var(--section-pad) * 0.4); }
+.section.space-bottom-none { padding-bottom: 0; }

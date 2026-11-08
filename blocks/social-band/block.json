@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/social-band",
+	"title": "Social Link Band",
+	"category": "lc-bot2026",
+	"icon": "share",
+	"description": "A band that sends visitors to Instagram or Facebook. The address comes from Site-Wide Settings. Replaces instagram_feed.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"network": { "type": "string", "default": "instagram" },
+		"title": { "type": "string", "default": "" },
+		"text": { "type": "string", "default": "" },
+		"surface": { "type": "string", "default": "brand" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

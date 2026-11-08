@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/cta-band",
+	"title": "Call to Action Band",
+	"category": "lc-bot2026",
+	"icon": "megaphone",
+	"description": "A short heading, line of text and one button. Replaces book_cta, sign_up_cta and large_image_link.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "" },
+		"text": { "type": "string", "default": "" },
+		"ctaText": { "type": "string", "default": "" },
+		"ctaUrl": { "type": "string", "default": "" },
+		"surface": { "type": "string", "default": "soft" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

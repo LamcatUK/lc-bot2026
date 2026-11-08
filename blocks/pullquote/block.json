@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/pullquote",
+	"title": "Pullquote",
+	"category": "lc-bot2026",
+	"icon": "format-quote",
+	"description": "Client quotes, set large. One quote shows on its own; two or more become a slider. Replaces the old testimonials.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "" },
+		"quotes": { "type": "array", "default": [] },
+		"surface": { "type": "string", "default": "surface" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

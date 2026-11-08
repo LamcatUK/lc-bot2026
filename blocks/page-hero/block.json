@@ -1,0 +1,23 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/page-hero",
+	"title": "Page Hero",
+	"category": "lc-bot2026",
+	"icon": "cover-image",
+	"description": "Page title with optional brush pill, intro, photo and button. Replaces quote_hero.",
+	"attributes": {
+		"title": { "type": "string", "default": "" },
+		"pillText": { "type": "string", "default": "" },
+		"intro": { "type": "string", "default": "" },
+		"imageId": { "type": "number", "default": 0 },
+		"imageUrl": { "type": "string", "default": "" },
+		"imageAlt": { "type": "string", "default": "" },
+		"ctaText": { "type": "string", "default": "" },
+		"ctaUrl": { "type": "string", "default": "" },
+		"brushEdge": { "type": "boolean", "default": true }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

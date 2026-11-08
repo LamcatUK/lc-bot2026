@@ -1,0 +1,26 @@
+.social-band__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+
+	& h2 {
+		margin-bottom: 0.15em;
+	}
+	& p {
+		margin: 0;
+	}
+}
+.social-band__btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6em;
+	justify-self: start;
+}
+@media (min-width: 800px) {
+	.social-band__inner {
+		grid-template-columns: 1fr auto;
+	}
+	.social-band__btn {
+		justify-self: end;
+	}
+}

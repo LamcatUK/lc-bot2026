@@ -18,27 +18,135 @@
           "origin": "theme"
         },
         {
-          "name": "grey-100",
-          "slug": "grey-100",
-          "color": "#f5f5f5",
+          "name": "forest-900",
+          "slug": "forest-900",
+          "color": "#1f2827",
           "origin": "theme"
         },
         {
-          "name": "grey-300",
-          "slug": "grey-300",
-          "color": "#d9d9d9",
+          "name": "forest-700",
+          "slug": "forest-700",
+          "color": "#303c3b",
           "origin": "theme"
         },
         {
-          "name": "grey-700",
-          "slug": "grey-700",
-          "color": "#4a4a4a",
+          "name": "forest-500",
+          "slug": "forest-500",
+          "color": "#4f6b66",
           "origin": "theme"
         },
         {
-          "name": "blue-700",
-          "slug": "blue-700",
-          "color": "#1d4ed8",
+          "name": "forest-300",
+          "slug": "forest-300",
+          "color": "#9db5ae",
+          "origin": "theme"
+        },
+        {
+          "name": "forest-200",
+          "slug": "forest-200",
+          "color": "#c3d4ce",
+          "origin": "theme"
+        },
+        {
+          "name": "forest-100",
+          "slug": "forest-100",
+          "color": "#e3ece8",
+          "origin": "theme"
+        },
+        {
+          "name": "mist",
+          "slug": "mist",
+          "color": "#f3f7f4",
+          "origin": "theme"
+        },
+        {
+          "name": "lime-700",
+          "slug": "lime-700",
+          "color": "#6b7d0e",
+          "origin": "theme"
+        },
+        {
+          "name": "lime-500",
+          "slug": "lime-500",
+          "color": "#b3cc1c",
+          "origin": "theme"
+        },
+        {
+          "name": "lime-300",
+          "slug": "lime-300",
+          "color": "#dfe98c",
+          "origin": "theme"
+        },
+        {
+          "name": "lime-200",
+          "slug": "lime-200",
+          "color": "#e8efae",
+          "origin": "theme"
+        },
+        {
+          "name": "lime-100",
+          "slug": "lime-100",
+          "color": "#f1f6cf",
+          "origin": "theme"
+        },
+        {
+          "name": "navy-900",
+          "slug": "navy-900",
+          "color": "#06203b",
+          "origin": "theme"
+        },
+        {
+          "name": "navy-700",
+          "slug": "navy-700",
+          "color": "#0a345e",
+          "origin": "theme"
+        },
+        {
+          "name": "navy-500",
+          "slug": "navy-500",
+          "color": "#3d6a9b",
+          "origin": "theme"
+        },
+        {
+          "name": "navy-300",
+          "slug": "navy-300",
+          "color": "#9fb9d6",
+          "origin": "theme"
+        },
+        {
+          "name": "navy-100",
+          "slug": "navy-100",
+          "color": "#dde8f3",
+          "origin": "theme"
+        },
+        {
+          "name": "sky",
+          "slug": "sky",
+          "color": "#f4f7fb",
+          "origin": "theme"
+        },
+        {
+          "name": "pink-700",
+          "slug": "pink-700",
+          "color": "#b0178f",
+          "origin": "theme"
+        },
+        {
+          "name": "pink-500",
+          "slug": "pink-500",
+          "color": "#fd78e1",
+          "origin": "theme"
+        },
+        {
+          "name": "pink-300",
+          "slug": "pink-300",
+          "color": "#fdc1f1",
+          "origin": "theme"
+        },
+        {
+          "name": "pink-100",
+          "slug": "pink-100",
+          "color": "#fee6fa",
           "origin": "theme"
         }
       ]
@@ -48,22 +156,27 @@
         {
           "name": "base",
           "slug": "base",
-          "size": "1rem"
+          "size": "clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem)"
+        },
+        {
+          "name": "lead",
+          "slug": "lead",
+          "size": "clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem)"
         },
         {
           "name": "h1",
           "slug": "h1",
-          "size": "clamp(2rem, 1.6rem + 2vw, 3rem)"
+          "size": "clamp(2.8rem, 1.8rem + 4vw, 5rem)"
         },
         {
           "name": "h2",
           "slug": "h2",
-          "size": "clamp(1.6rem, 1.35rem + 1.25vw, 2.25rem)"
+          "size": "clamp(2.2rem, 1.6rem + 2.4vw, 3.5rem)"
         },
         {
           "name": "h3",
           "slug": "h3",
-          "size": "clamp(1.3rem, 1.15rem + 0.75vw, 1.75rem)"
+          "size": "clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem)"
         },
         {
           "name": "h4",

@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/text-image",
+	"title": "Text and Media",
+	"category": "lc-bot2026",
+	"icon": "align-pull-left",
+	"description": "Copy beside a photo or video, with an optional brush edge. Replaces 2_col_image_text and video_block.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "" },
+		"content": { "type": "string", "default": "" },
+		"imageId": { "type": "number", "default": 0 },
+		"imageUrl": { "type": "string", "default": "" },
+		"imageAlt": { "type": "string", "default": "" },
+		"imageSide": { "type": "string", "default": "right" },
+		"videoUrl": { "type": "string", "default": "" },
+		"imageRatio": { "type": "string", "default": "original" },
+		"brushMask": { "type": "boolean", "default": true },
+		"surface": { "type": "string", "default": "surface" },
+		"ctaText": { "type": "string", "default": "" },
+		"ctaUrl": { "type": "string", "default": "" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

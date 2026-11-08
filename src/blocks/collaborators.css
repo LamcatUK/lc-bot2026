@@ -1,0 +1,121 @@
+.collaborators .lead {
+	margin-top: var(--space-2);
+}
+
+.collaborators__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	gap: var(--space-5) var(--space-4);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* One item is one link: the title's link is stretched over the whole item */
+.collaborators__item {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+
+	& h3 {
+		margin: var(--space-4) 0 var(--space-2);
+		font-size: var(--fs-h3);
+	}
+	& p {
+		margin: 0 auto;
+		max-width: 28ch;
+	}
+}
+
+/* Logo on a white disc, with a brush-stroke of the wash colour behind it.
+   The disc is its own stacking context: stroke at -2, white disc at -1, logo above. */
+.collaborators__disc {
+	position: relative;
+	isolation: isolate;
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 9.5rem;
+	aspect-ratio: 1;
+	transition: scale 250ms ease;
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: -0.7rem -1.1rem -0.7rem -1.1rem;
+		z-index: -2;
+		background: var(--col-wash);
+		rotate: -7deg;
+		-webkit-mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: 50%;
+		background: var(--col-white);
+		box-shadow: 0 6px 18px rgb(31 40 39 / 0.16);
+	}
+
+	& img {
+		width: 72%;
+		height: 72%;
+		object-fit: contain;
+	}
+}
+.collaborators__item:nth-child(even) .collaborators__disc::before {
+	rotate: 6deg;
+}
+.collaborators__item:hover .collaborators__disc {
+	scale: 1.05;
+}
+
+.collaborators__link {
+	color: inherit;
+	text-decoration: none;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+	}
+	&:hover {
+		text-decoration: none;
+	}
+	&:focus-visible {
+		outline: none;
+	}
+}
+.collaborators__item:has(a:focus-visible) {
+	outline: 3px solid var(--col-accent);
+	outline-offset: 8px;
+}
+.collaborators__item:hover .collaborators__link {
+	color: var(--col-accent-text);
+}
+
+.collaborators__visit {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	margin-top: var(--space-2);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+	color: var(--col-accent-text);
+
+	& svg {
+		display: inline-block;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.collaborators__disc {
+		transition: none;
+	}
+}

@@ -18,10 +18,10 @@
 <?php wp_body_open(); ?>
 
 <!-- HEADER-NAV:START -->
-<header id="masthead">
+<header id="masthead" data-surface="brand">
 	<nav class="navbar container" aria-label="Primary navigation">
 		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="navbar-brand">
-			<?php bloginfo( 'name' ); ?>
+			<span class="navbar-logo" role="img" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"></span>
 		</a>
 
 		<button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Toggle navigation">

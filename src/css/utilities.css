@@ -22,18 +22,48 @@
 .text-end { text-align: right; }
 .fw-col-white { font-weight: #ffffff; }
 .fw-col-black { font-weight: #000000; }
-.fw-col-grey-100 { font-weight: #f5f5f5; }
-.fw-col-grey-300 { font-weight: #d9d9d9; }
-.fw-col-grey-700 { font-weight: #4a4a4a; }
-.fw-col-blue-700 { font-weight: #1d4ed8; }
-.fw-col-primary { font-weight: var(--col-blue-700); }
-.fw-col-body { font-weight: var(--col-black); }
-.fw-col-body-bg { font-weight: var(--col-white); }
-.fw-font-family-base { font-weight: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-.fw-fs-base { font-weight: 1rem; }
-.fw-fs-h1 { font-weight: clamp(2rem, 1.6rem + 2vw, 3rem); }
-.fw-fs-h2 { font-weight: clamp(1.6rem, 1.35rem + 1.25vw, 2.25rem); }
-.fw-fs-h3 { font-weight: clamp(1.3rem, 1.15rem + 0.75vw, 1.75rem); }
+.fw-col-forest-900 { font-weight: #1f2827; }
+.fw-col-forest-700 { font-weight: #303c3b; }
+.fw-col-forest-500 { font-weight: #4f6b66; }
+.fw-col-forest-300 { font-weight: #9db5ae; }
+.fw-col-forest-200 { font-weight: #c3d4ce; }
+.fw-col-forest-100 { font-weight: #e3ece8; }
+.fw-col-mist { font-weight: #f3f7f4; }
+.fw-col-lime-700 { font-weight: #6b7d0e; }
+.fw-col-lime-500 { font-weight: #b3cc1c; }
+.fw-col-lime-300 { font-weight: #dfe98c; }
+.fw-col-lime-200 { font-weight: #e8efae; }
+.fw-col-lime-100 { font-weight: #f1f6cf; }
+.fw-col-navy-900 { font-weight: #06203b; }
+.fw-col-navy-700 { font-weight: #0a345e; }
+.fw-col-navy-500 { font-weight: #3d6a9b; }
+.fw-col-navy-300 { font-weight: #9fb9d6; }
+.fw-col-navy-100 { font-weight: #dde8f3; }
+.fw-col-sky { font-weight: #f4f7fb; }
+.fw-col-pink-700 { font-weight: #b0178f; }
+.fw-col-pink-500 { font-weight: #fd78e1; }
+.fw-col-pink-300 { font-weight: #fdc1f1; }
+.fw-col-pink-100 { font-weight: #fee6fa; }
+.fw-col-ink { font-weight: var(--col-forest-900); }
+.fw-col-brand { font-weight: var(--col-forest-700); }
+.fw-col-brand-mid { font-weight: var(--col-forest-500); }
+.fw-col-brand-line { font-weight: var(--col-forest-300); }
+.fw-col-tint { font-weight: var(--col-forest-100); }
+.fw-col-surface { font-weight: var(--col-mist); }
+.fw-col-accent { font-weight: var(--col-lime-500); }
+.fw-col-accent-text { font-weight: var(--col-lime-700); }
+.fw-col-wash { font-weight: var(--col-lime-200); }
+.fw-col-wash-soft { font-weight: var(--col-lime-100); }
+.fw-col-primary { font-weight: var(--col-accent-text); }
+.fw-col-body { font-weight: var(--col-ink); }
+.fw-col-body-bg { font-weight: var(--col-surface); }
+.fw-font-family-base { font-weight: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.fw-font-family-display { font-weight: "Lemonado", "Montserrat", system-ui, sans-serif; }
+.fw-fs-base { font-weight: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); }
+.fw-fs-lead { font-weight: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem); }
+.fw-fs-h1 { font-weight: clamp(2.8rem, 1.8rem + 4vw, 5rem); }
+.fw-fs-h2 { font-weight: clamp(2.2rem, 1.6rem + 2.4vw, 3.5rem); }
+.fw-fs-h3 { font-weight: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem); }
 .fw-fs-h4 { font-weight: 1.25rem; }
 .fw-fs-h5 { font-weight: 1.1rem; }
 .fw-fs-h6 { font-weight: 1rem; }
@@ -44,8 +74,9 @@
 .fw-fw-normal { font-weight: var(--fw-400); }
 .fw-fw-semibold { font-weight: var(--fw-600); }
 .fw-fw-bold { font-weight: var(--fw-700); }
-.fw-line-height-base { font-weight: 1.5; }
-.fw-line-height-heading { font-weight: 1.2; }
+.fw-line-height-base { font-weight: 1.7; }
+.fw-line-height-heading { font-weight: 1.04; }
+.fw-measure { font-weight: 62ch; }
 .fw-space-0 { font-weight: 0; }
 .fw-space-1 { font-weight: 0.25rem; }
 .fw-space-2 { font-weight: 0.5rem; }
@@ -64,6 +95,9 @@
 .fw-grid-gutter { font-weight: var(--space-3); }
 .fw-grid-min { font-weight: 16rem; }
 .fw-nav-height { font-weight: 4rem; }
+.fw-section-pad { font-weight: clamp(2.5rem, 1.75rem + 3.5vw, 4.5rem); }
+.fw-edge-height { font-weight: clamp(48px, 7vw, 90px); }
+.fw-edge-overlap { font-weight: calc(var(--edge-height) * 0.75); }
 .w-25 { width: 25%; }
 .w-50 { width: 50%; }
 .w-75 { width: 75%; }
@@ -363,6 +397,7 @@
 	.me-sm-auto { margin-right: auto; }
 	.mx-sm-auto { margin-left: auto; margin-right: auto; }
 	.my-sm-auto { margin-top: auto; margin-bottom: auto; }
+}
 
 @media (min-width: 768px) {
 	.d-md-block { display: block; }
@@ -522,6 +557,7 @@
 	.me-md-auto { margin-right: auto; }
 	.mx-md-auto { margin-left: auto; margin-right: auto; }
 	.my-md-auto { margin-top: auto; margin-bottom: auto; }
+}
 
 @media (min-width: 992px) {
 	.d-lg-block { display: block; }
@@ -681,6 +717,7 @@
 	.me-lg-auto { margin-right: auto; }
 	.mx-lg-auto { margin-left: auto; margin-right: auto; }
 	.my-lg-auto { margin-top: auto; margin-bottom: auto; }
+}
 
 @media (min-width: 1200px) {
 	.d-xl-block { display: block; }
@@ -840,6 +877,7 @@
 	.me-xl-auto { margin-right: auto; }
 	.mx-xl-auto { margin-left: auto; margin-right: auto; }
 	.my-xl-auto { margin-top: auto; margin-bottom: auto; }
+}
 
 @media (min-width: 1400px) {
 	.d-xxl-block { display: block; }
@@ -999,4 +1037,5 @@
 	.me-xxl-auto { margin-right: auto; }
 	.mx-xxl-auto { margin-left: auto; margin-right: auto; }
 	.my-xxl-auto { margin-top: auto; margin-bottom: auto; }
+}
 

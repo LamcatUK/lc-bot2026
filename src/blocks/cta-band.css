@@ -1,0 +1,17 @@
+.cta-band__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+
+	& h2 {
+		margin-bottom: 0.2em;
+	}
+	& p {
+		margin-bottom: 0;
+	}
+}
+@media (min-width: 800px) {
+	.cta-band__inner {
+		grid-template-columns: 1fr auto;
+	}
+}

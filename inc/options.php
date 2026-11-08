@@ -68,7 +68,8 @@ function lc_bot2026_register_settings_page() {
 	add_settings_section( 'lc_bot2026_tracking', 'Tracking & Verification', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'lc_bot2026_scripts', 'Scripts', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'lc_bot2026_gallery', 'Gallery', '__return_false', 'theme-general-settings' );
-	add_settings_section( 'lc_bot2026_repeater', 'Repeater', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'lc_bot2026_partners', 'Collaborators', '__return_false', 'theme-general-settings' );
+	add_settings_section( 'lc_bot2026_accreditations', 'Accreditations', '__return_false', 'theme-general-settings' );
 
 	$fields = array(
 		'email'                     => array(
@@ -152,10 +153,10 @@ function lc_bot2026_register_settings_page() {
 			'section'     => 'lc_bot2026_gallery',
 			'description' => 'A fixed multi-image list — e.g. accreditation badges, a logo strip. Read with lc_bot2026_get_repeater_setting-style helper of your own, mirroring lc_bot2026_get_footer_accreditation_ids() in the cb-hts-js-2026 sibling theme.',
 		),
-		'example_repeater'          => array(
-			'label'       => 'Example Repeater',
+		'accreditations'            => array(
+			'label'       => 'Accreditations',
 			'type'        => 'repeater',
-			'section'     => 'lc_bot2026_repeater',
+			'section'     => 'lc_bot2026_accreditations',
 			'sub_fields'  => array(
 				'name' => array(
 					'label' => 'Name',
@@ -165,8 +166,36 @@ function lc_bot2026_register_settings_page() {
 					'label' => 'Logo',
 					'type'  => 'image',
 				),
+				'url'  => array(
+					'label' => 'Website (optional)',
+					'type'  => 'text',
+				),
 			),
-			'description' => 'Genuinely repeating structured rows — e.g. a client-logo list. Read with lc_bot2026_get_repeater_setting( \'example_repeater\' ).',
+			'description' => 'Qualifications and memberships shown as a row of logos in the footer. Use white or light logos: the footer is dark. The name becomes the logo\'s alt text. Read with lc_bot2026_get_repeater_setting( \'accreditations\' ).',
+		),
+		'partners'                  => array(
+			'label'       => 'Collaborators',
+			'type'        => 'repeater',
+			'section'     => 'lc_bot2026_partners',
+			'sub_fields'  => array(
+				'name'        => array(
+					'label' => 'Name',
+					'type'  => 'text',
+				),
+				'logo'        => array(
+					'label' => 'Logo',
+					'type'  => 'image',
+				),
+				'url'         => array(
+					'label' => 'Website',
+					'type'  => 'text',
+				),
+				'description' => array(
+					'label' => 'Short description',
+					'type'  => 'text',
+				),
+			),
+			'description' => 'Organisations Back on Track works with. Shown by the Collaborators block. Keep each description to a sentence. Read with lc_bot2026_get_repeater_setting( \'partners\' ).',
 		),
 	);
 

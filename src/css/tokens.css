@@ -8,24 +8,60 @@
  */
 
 :root {
-  /* Colour palette — rename/replace per project, keep the slug shape */
+  /* Brand ramps. Hiking is the default; fitness re-points the same
+	   semantic tokens below via body.theme-fitness (not a second ramp name). */
   --col-white: #ffffff;
   --col-black: #000000;
-  --col-grey-100: #f5f5f5;
-  --col-grey-300: #d9d9d9;
-  --col-grey-700: #4a4a4a;
-  --col-blue-700: #1d4ed8;
 
-  --col-primary: var(--col-blue-700);
-  --col-body: var(--col-black);
-  --col-body-bg: var(--col-white);
+  --col-forest-900: #1f2827;
+  --col-forest-700: #303c3b;
+  --col-forest-500: #4f6b66;
+  --col-forest-300: #9db5ae;
+  --col-forest-200: #c3d4ce;
+  --col-forest-100: #e3ece8;
+  --col-mist: #f3f7f4;
+  --col-lime-700: #6b7d0e;
+  --col-lime-500: #b3cc1c;
+  --col-lime-300: #dfe98c;
+  --col-lime-200: #e8efae;
+  --col-lime-100: #f1f6cf;
 
-  /* Type scale */
-  --font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --fs-base: 1rem;
-  --fs-h1: clamp(2rem, 1.6rem + 2vw, 3rem);
-  --fs-h2: clamp(1.6rem, 1.35rem + 1.25vw, 2.25rem);
-  --fs-h3: clamp(1.3rem, 1.15rem + 0.75vw, 1.75rem);
+  --col-navy-900: #06203b;
+  --col-navy-700: #0a345e;
+  --col-navy-500: #3d6a9b;
+  --col-navy-300: #9fb9d6;
+  --col-navy-100: #dde8f3;
+  --col-sky: #f4f7fb;
+  --col-pink-700: #b0178f;
+  --col-pink-500: #fd78e1;
+  --col-pink-300: #fdc1f1;
+  --col-pink-100: #fee6fa;
+
+  /* Semantic tokens: blocks use only these. */
+  --col-ink: var(--col-forest-900);
+  --col-brand: var(--col-forest-700);
+  --col-brand-mid: var(--col-forest-500);
+  --col-brand-line: var(--col-forest-300);
+  --col-tint: var(--col-forest-100);
+  --col-surface: var(--col-mist);
+  --col-accent: var(--col-lime-500);
+  --col-accent-text: var(--col-lime-700);
+  --col-wash: var(--col-lime-200);
+  --col-wash-soft: var(--col-lime-100);
+
+  --col-primary: var(--col-accent-text);
+  --col-body: var(--col-ink);
+  --col-body-bg: var(--col-surface);
+
+  /* Type scale — body 17 to 19px, headings in the display script */
+  --font-family-base:
+    "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-family-display: "Lemonado", "Montserrat", system-ui, sans-serif;
+  --fs-base: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --fs-lead: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --fs-h1: clamp(2.8rem, 1.8rem + 4vw, 5rem);
+  --fs-h2: clamp(2.2rem, 1.6rem + 2.4vw, 3.5rem);
+  --fs-h3: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem);
   --fs-h4: 1.25rem;
   --fs-h5: 1.1rem;
   --fs-h6: 1rem;
@@ -41,8 +77,9 @@
   --fw-semibold: var(--fw-600);
   --fw-bold: var(--fw-700);
 
-  --line-height-base: 1.5;
-  --line-height-heading: 1.2;
+  --line-height-base: 1.7;
+  --line-height-heading: 1.04;
+  --measure: 62ch;
 
   /* Spacing scale — used by both hand-authored CSS and the utility generator */
   --space-0: 0;
@@ -72,4 +109,25 @@
   --grid-min: 16rem;
 
   --nav-height: 4rem;
+
+  /* Vertical rhythm: one section's padding, and the height of the brush edges */
+  --section-pad: clamp(2.5rem, 1.75rem + 3.5vw, 4.5rem);
+  --edge-height: clamp(48px, 7vw, 90px);
+  /* How far up into its own block a brush edge reaches (the rough part of the stroke) */
+  --edge-overlap: calc(var(--edge-height) * 0.75);
+}
+
+/* Fitness theme: same semantic tokens, navy and pink ramps. Not a :root
+   block on purpose, so generate-theme-json.js keeps reading hiking only. */
+body.theme-fitness {
+  --col-ink: var(--col-navy-900);
+  --col-brand: var(--col-navy-700);
+  --col-brand-mid: var(--col-navy-500);
+  --col-brand-line: var(--col-navy-300);
+  --col-tint: var(--col-navy-100);
+  --col-surface: var(--col-sky);
+  --col-accent: var(--col-pink-500);
+  --col-accent-text: var(--col-pink-700);
+  --col-wash: var(--col-pink-300);
+  --col-wash-soft: var(--col-pink-100);
 }

@@ -1,0 +1,97 @@
+.newsletter-band__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+
+	& h2 {
+		margin-bottom: 0.15em;
+	}
+	& p {
+		margin: 0;
+	}
+}
+
+/* Mailchimp for WP's form (its own markup, set up in the plugin): email, first and
+   last name, the privacy consent line, then the button. */
+.newsletter-band__form {
+	& .mc4wp-form-fields {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-2);
+	}
+	& p {
+		margin: 0;
+		max-width: none;
+	}
+	& label.w-100 {
+		display: block;
+		margin: 0;
+	}
+	& .form-control {
+		width: 100%;
+		padding: 0.8em 1.2em;
+		border: 2px solid transparent;
+		border-radius: 999px;
+		background: var(--col-white);
+		color: var(--col-ink);
+
+		&:focus-visible {
+			outline: 3px solid var(--col-accent);
+			outline-offset: 2px;
+		}
+	}
+	& .form-check {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6em;
+		font-size: var(--fs-small);
+
+		& input {
+			flex: none;
+			margin-top: 0.3em;
+		}
+		& a {
+			color: inherit;
+			text-decoration: underline;
+		}
+	}
+	& .btn,
+	& input[type="submit"] {
+		width: 100%;
+		margin-top: var(--space-1);
+	}
+	& .mc4wp-response {
+		margin-top: var(--space-2);
+		font-weight: var(--fw-700);
+	}
+	& .mc4wp-alert {
+		margin: 0;
+	}
+}
+@media (min-width: 560px) {
+	.newsletter-band__form .mc4wp-form-fields > label:nth-of-type(2),
+	.newsletter-band__form .mc4wp-form-fields > label:nth-of-type(3) {
+		grid-column: span 1;
+	}
+	.newsletter-band__form .mc4wp-form-fields {
+		grid-template-columns: 1fr 1fr;
+	}
+	.newsletter-band__form .mc4wp-form-fields > label:first-child,
+	.newsletter-band__form .mc4wp-form-fields > p,
+	.newsletter-band__form .mc4wp-form-fields > input[type="submit"],
+	.newsletter-band__form .mc4wp-form-fields > .form-check {
+		grid-column: 1 / -1;
+	}
+}
+[data-surface="brand"] .newsletter-band__form .btn:hover {
+	background: var(--col-white);
+	border-color: var(--col-white);
+	color: var(--col-ink);
+}
+
+@media (min-width: 800px) {
+	.newsletter-band__inner {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-6);
+	}
+}

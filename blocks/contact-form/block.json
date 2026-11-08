@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/contact-form",
+	"title": "Contact",
+	"category": "lc-bot2026",
+	"icon": "email",
+	"description": "Contact details on the left, a Contact Form 7 form on the right. Phone, email and social links come from Site-Wide Settings.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "Get in touch" },
+		"content": { "type": "string", "default": "" },
+		"showDetails": { "type": "boolean", "default": true },
+		"formId": { "type": "number", "default": 0 },
+		"surface": { "type": "string", "default": "surface" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

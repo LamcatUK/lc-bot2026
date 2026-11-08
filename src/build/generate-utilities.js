@@ -124,7 +124,7 @@ function generateUtilities() {
 			output += `@media (min-width: ${px}px) {\n${rules
 				.split('\n')
 				.map((l) => '\t' + l)
-				.join('\n')}\n\n`;
+				.join('\n')}\n}\n\n`;
 		}
 	}
 

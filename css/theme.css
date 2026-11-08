@@ -8,24 +8,60 @@
  */
 
 :root {
-  /* Colour palette — rename/replace per project, keep the slug shape */
+  /* Brand ramps. Hiking is the default; fitness re-points the same
+	   semantic tokens below via body.theme-fitness (not a second ramp name). */
   --col-white: #ffffff;
   --col-black: #000000;
-  --col-grey-100: #f5f5f5;
-  --col-grey-300: #d9d9d9;
-  --col-grey-700: #4a4a4a;
-  --col-blue-700: #1d4ed8;
 
-  --col-primary: var(--col-blue-700);
-  --col-body: var(--col-black);
-  --col-body-bg: var(--col-white);
+  --col-forest-900: #1f2827;
+  --col-forest-700: #303c3b;
+  --col-forest-500: #4f6b66;
+  --col-forest-300: #9db5ae;
+  --col-forest-200: #c3d4ce;
+  --col-forest-100: #e3ece8;
+  --col-mist: #f3f7f4;
+  --col-lime-700: #6b7d0e;
+  --col-lime-500: #b3cc1c;
+  --col-lime-300: #dfe98c;
+  --col-lime-200: #e8efae;
+  --col-lime-100: #f1f6cf;
 
-  /* Type scale */
-  --font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --fs-base: 1rem;
-  --fs-h1: clamp(2rem, 1.6rem + 2vw, 3rem);
-  --fs-h2: clamp(1.6rem, 1.35rem + 1.25vw, 2.25rem);
-  --fs-h3: clamp(1.3rem, 1.15rem + 0.75vw, 1.75rem);
+  --col-navy-900: #06203b;
+  --col-navy-700: #0a345e;
+  --col-navy-500: #3d6a9b;
+  --col-navy-300: #9fb9d6;
+  --col-navy-100: #dde8f3;
+  --col-sky: #f4f7fb;
+  --col-pink-700: #b0178f;
+  --col-pink-500: #fd78e1;
+  --col-pink-300: #fdc1f1;
+  --col-pink-100: #fee6fa;
+
+  /* Semantic tokens: blocks use only these. */
+  --col-ink: var(--col-forest-900);
+  --col-brand: var(--col-forest-700);
+  --col-brand-mid: var(--col-forest-500);
+  --col-brand-line: var(--col-forest-300);
+  --col-tint: var(--col-forest-100);
+  --col-surface: var(--col-mist);
+  --col-accent: var(--col-lime-500);
+  --col-accent-text: var(--col-lime-700);
+  --col-wash: var(--col-lime-200);
+  --col-wash-soft: var(--col-lime-100);
+
+  --col-primary: var(--col-accent-text);
+  --col-body: var(--col-ink);
+  --col-body-bg: var(--col-surface);
+
+  /* Type scale — body 17 to 19px, headings in the display script */
+  --font-family-base:
+    "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-family-display: "Lemonado", "Montserrat", system-ui, sans-serif;
+  --fs-base: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --fs-lead: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --fs-h1: clamp(2.8rem, 1.8rem + 4vw, 5rem);
+  --fs-h2: clamp(2.2rem, 1.6rem + 2.4vw, 3.5rem);
+  --fs-h3: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem);
   --fs-h4: 1.25rem;
   --fs-h5: 1.1rem;
   --fs-h6: 1rem;
@@ -41,8 +77,9 @@
   --fw-semibold: var(--fw-600);
   --fw-bold: var(--fw-700);
 
-  --line-height-base: 1.5;
-  --line-height-heading: 1.2;
+  --line-height-base: 1.7;
+  --line-height-heading: 1.04;
+  --measure: 62ch;
 
   /* Spacing scale — used by both hand-authored CSS and the utility generator */
   --space-0: 0;
@@ -72,8 +109,28 @@
   --grid-min: 16rem;
 
   --nav-height: 4rem;
+
+  /* Vertical rhythm: one section's padding, and the height of the brush edges */
+  --section-pad: clamp(2.5rem, 1.75rem + 3.5vw, 4.5rem);
+  --edge-height: clamp(48px, 7vw, 90px);
+  /* How far up into its own block a brush edge reaches (the rough part of the stroke) */
+  --edge-overlap: calc(var(--edge-height) * 0.75);
 }
 
+/* Fitness theme: same semantic tokens, navy and pink ramps. Not a :root
+   block on purpose, so generate-theme-json.js keeps reading hiking only. */
+body.theme-fitness {
+  --col-ink: var(--col-navy-900);
+  --col-brand: var(--col-navy-700);
+  --col-brand-mid: var(--col-navy-500);
+  --col-brand-line: var(--col-navy-300);
+  --col-tint: var(--col-navy-100);
+  --col-surface: var(--col-sky);
+  --col-accent: var(--col-pink-500);
+  --col-accent-text: var(--col-pink-700);
+  --col-wash: var(--col-pink-300);
+  --col-wash-soft: var(--col-pink-100);
+}
 /* Base element reset — the "reboot" equivalent. Deliberately small. */
 
 *,
@@ -184,6 +241,142 @@ ol {
 	border: 0 !important;
 }
 
+@font-face {
+	font-family: "Montserrat";
+	font-weight: 400;
+	font-display: swap;
+	src: url("../fonts/montserrat-400.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Montserrat";
+	font-weight: 700;
+	font-display: swap;
+	src: url("../fonts/montserrat-700.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Lemonado";
+	font-weight: 400;
+	font-display: swap;
+	src: url("../fonts/lemonado-script-textured.woff2") format("woff2");
+}
+
+body {
+	font-kerning: normal;
+	text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-family-display);
+	font-weight: var(--fw-400);
+	letter-spacing: -0.01em;
+	text-wrap: balance;
+}
+
+h4,
+h5,
+h6 {
+	font-weight: var(--fw-700);
+	line-height: 1.25;
+}
+
+p,
+li {
+	max-width: var(--measure);
+}
+
+.lead {
+	font-size: var(--fs-lead);
+	line-height: 1.5;
+}
+
+a {
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 0.08em;
+}
+
+/* Brush image mask. Placeholder shape, swap the SVG in img/brush/ later. */
+.brush-photo {
+	mask: url("../img/brush/brush-photo.svg") center / 100% 100% no-repeat;
+}
+
+/* Brush section edge: add to a dark section, it paints the next surface over the bottom. */
+.brush-edge {
+	position: relative;
+}
+.brush-edge::after {
+		content: "";
+		position: absolute;
+		inset: auto 0 -1px;
+		height: var(--edge-height);
+		background: var(--edge-colour, var(--col-surface));
+		transform: scaleY(-1);
+		mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+
+/* Pill label: short script text on a brush stroke. */
+.pill {
+	display: inline-block;
+	position: relative;
+	isolation: isolate;
+	padding: 0.55em 1.6em 0.65em;
+	font-family: var(--font-family-display);
+	font-size: var(--fs-h3);
+	line-height: 1.05;
+	color: var(--col-brand);
+	transform: rotate(-3deg);
+}
+.pill::before {
+		content: "";
+		position: absolute;
+		inset: -0.25em -0.5em;
+		z-index: -1;
+		background: var(--col-wash);
+		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+	}
+
+/* Section surfaces shared by every block via data-surface */
+[data-surface="surface"] { --surface-bg: var(--col-surface); background: var(--surface-bg); color: var(--col-ink); }
+[data-surface="tint"] { --surface-bg: var(--col-tint); background: var(--surface-bg); color: var(--col-ink); }
+[data-surface="soft"] { --surface-bg: var(--col-wash-soft); background: var(--surface-bg); color: var(--col-ink); }
+[data-surface="brand"] { --surface-bg: var(--col-brand); background: var(--surface-bg); color: var(--col-white); --edge-colour: var(--col-surface); }
+
+/* Brush edge on the TOP of any block: the block paints its own colour up over
+   the bottom of whatever sits above it, so no colour needs choosing. The
+   section above keeps its own bottom padding, which is deeper than the edge's
+   rough zone, so its content stays clear. */
+.brush-top {
+	position: relative;
+}
+.brush-top::before {
+		content: "";
+		position: absolute;
+		inset: auto 0 calc(100% - 1px);
+		height: var(--edge-height);
+		background: var(--surface-bg);
+		transform: scaleY(-1);
+		mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+
+[data-surface="brand"] .pill { color: var(--col-brand); }
+.section { display: flow-root; padding-block: var(--section-pad); } /* flow-root: a last paragraph's margin can't escape and leave a strip when padding is trimmed */
+/* Brush edges. A stroke paints up over the bottom of the block it sits on, so that
+   block needs extra bottom padding or its content ends up under the brush. Both
+   cases are found automatically: a block followed by a brush-top block, and a
+   block with its own brush edge (the hero). The brush itself marks the break, so
+   the block below it needs less top padding. */
+.section:has(+ .brush-top),
+.section.brush-edge { padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap)); }
+.section.brush-top { padding-top: calc(var(--section-pad) * 0.4); }
+.brush-edge + .section { padding-top: calc(var(--section-pad) * 0.6); }
+/* Per-block spacing choices (Space above / Space below in the editor) */
+.section.space-top-small { padding-top: calc(var(--section-pad) * 0.4); }
+.section.space-top-none { padding-top: 0; }
+.section.space-bottom-small { padding-bottom: calc(var(--section-pad) * 0.4); }
+.section.space-bottom-none { padding-bottom: 0; }
 /*
  * Structural grid container rules. The actual `.col-*` / `.col-md-*` span
  * classes are generated (see src/build/generate-utilities.js) since they're
@@ -317,20 +510,58 @@ ol {
 	padding-block: var(--space-2);
 }
 
+#masthead {
+	position: sticky;
+	top: 0;
+	z-index: 30;
+}
+
+/* A brush edge under the bar, mirrored left to right so it never lines up with
+   the other edges on the page. Painted in the bar's own colour, so it follows
+   the fitness theme. */
+#masthead::after {
+	content: "";
+	position: absolute;
+	inset: 75% 0 auto;
+	height: clamp(22px, 3vw, 40px);
+	background: var(--col-brand);
+	transform: scaleX(-1);
+	mask: url("../img/brush/brush-edge.svg?v=8") center top / 100% 100% no-repeat;
+	pointer-events: none;
+}
+
+.admin-bar #masthead {
+	top: 32px;
+}
+
+@media (max-width: 782px) {
+	.admin-bar #masthead {
+		top: 46px;
+	}
+}
+
 .navbar-brand {
-	font-weight: var(--fw-700);
+	display: block;
 	text-decoration: none;
-	color: var(--col-body);
+}
+
+.navbar-logo {
+	display: block;
+	width: clamp(10rem, 8rem + 8vw, 15rem);
+	aspect-ratio: 586 / 81;
+	background: var(--col-accent);
+	mask: url("../img/logo-long.svg") center / contain no-repeat;
 }
 
 .navbar-toggler {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--space-1);
-	padding: var(--space-1) var(--space-2);
-	border: 1px solid var(--col-grey-300);
-	border-radius: var(--radius-sm);
+	padding: var(--space-2);
+	border: 2px solid var(--col-accent);
+	border-radius: 999px;
 	background: none;
+	color: var(--col-white);
 	cursor: pointer;
 }
 
@@ -346,8 +577,8 @@ ol {
 	top: 100%;
 	left: 0;
 	right: 0;
-	background-color: var(--col-body-bg);
-	border-top: 1px solid var(--col-grey-300);
+	background-color: var(--col-brand);
+	border-top: 1px solid var(--col-brand-mid);
 	box-shadow: var(--shadow-lg);
 	padding: var(--space-3);
 	max-height: calc(100vh - 100%);
@@ -367,13 +598,29 @@ ol {
 .nav-link {
 	display: block;
 	text-decoration: none;
-	color: var(--col-body);
-	padding: var(--space-1) 0;
+	color: var(--col-white);
+	font-weight: var(--fw-700);
+	padding: var(--space-2) var(--space-2);
+	border-radius: var(--radius-sm);
 }
 
-.nav-link.active,.nav-link[aria-current="page"] {
-		font-weight: var(--fw-600);
+.nav-link:hover {
+		color: var(--col-accent);
 	}
+
+.nav-link.active,.nav-link[aria-current="page"] {
+		color: var(--col-accent);
+	}
+
+.nav-link:focus-visible {
+		outline: 3px solid var(--col-accent);
+		outline-offset: 2px;
+	}
+
+.dropdown-menu .nav-link {
+	font-weight: var(--fw-400);
+	white-space: nowrap;
+}
 
 /* Submenus — nested, always visible on mobile; shown via click as a
    floating panel from "lg" up. */
@@ -423,6 +670,8 @@ ol {
 
 	.navbar-nav {
 		flex-direction: row;
+		align-items: center;
+		gap: var(--space-1);
 		margin: 0;
 	}
 
@@ -434,17 +683,118 @@ ol {
 		position: absolute;
 		top: 100%;
 		left: 0;
-		min-width: 10rem;
+		min-width: 14rem;
 		margin: 0;
 		padding: var(--space-2);
-		background-color: var(--col-body-bg);
-		border: 1px solid var(--col-grey-300);
-		border-radius: var(--radius-sm);
+		background-color: var(--col-brand);
+		border: 1px solid var(--col-brand-mid);
+		border-radius: var(--radius-lg);
 		box-shadow: var(--shadow-lg);
 		z-index: 10;
 	}
 }
 
+#footer {
+	position: relative;
+	padding-top: var(--section-pad);
+
+	/* Brush edge painted over whatever sits above the footer */
+}
+
+#footer::before {
+		content: "";
+		position: absolute;
+		inset: auto 0 100%;
+		height: var(--edge-height);
+		background: var(--col-brand);
+		transform: scaleY(-1);
+		mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+
+#footer a {
+		color: var(--col-white);
+		text-decoration: none;
+	}
+
+:is(#footer a):hover {
+			color: var(--col-accent);
+			text-decoration: underline;
+		}
+
+.footer__grid {
+	display: grid;
+	gap: var(--space-5);
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 800px) {
+	.footer__grid {
+		grid-template-columns: 2fr 1fr 1fr;
+	}
+}
+
+.footer__logo {
+	margin-bottom: var(--space-3);
+}
+
+.footer__heading {
+	font-family: var(--font-family-base);
+	font-size: var(--fs-base);
+	font-weight: var(--fw-700);
+	color: var(--col-accent);
+	margin-bottom: var(--space-2);
+}
+
+.footer__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.footer__list li + li {
+		margin-top: var(--space-2);
+	}
+
+/* Accreditation logos: a quiet row of white marks above the colophon */
+.footer__accreditations {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-4) var(--space-5);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+}
+.footer__accreditations img {
+		width: auto;
+		height: clamp(2.25rem, 1.5rem + 2vw, 3.25rem);
+		max-width: 11rem;
+		object-fit: contain;
+		opacity: 0.85;
+		transition: opacity var(--transition);
+	}
+.footer__accreditations a:hover img,.footer__accreditations a:focus-visible img {
+		opacity: 1;
+	}
+
+#colophon {
+	margin-top: var(--space-5);
+	padding-block: var(--space-3);
+	border-top: 1px solid var(--col-brand-mid);
+	font-size: var(--fs-small);
+}
+
+#colophon p {
+		margin: 0;
+	}
+
+/* The footer's brush edge paints over the bottom of the last section, so give
+   that section room and keep its text clear of the stroke. */
+#main > :last-child {
+	padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap));
+}
 /* Minimal, deliberately unopinionated form base — expected to be overridden per project. */
 
 input,
@@ -474,7 +824,7 @@ select {
 	display: block;
 	width: 100%;
 	padding: var(--space-2);
-	border: 1px solid var(--col-grey-300);
+	border: 1px solid var(--col-brand-line);
 	border-radius: var(--radius-sm);
 	background-color: var(--col-white);
 	color: var(--col-body);
@@ -486,19 +836,46 @@ select {
 
 .btn {
 	display: inline-block;
-	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--col-primary);
-	border-radius: var(--radius-sm);
-	background-color: var(--col-primary);
-	color: var(--col-white);
+	padding: 0.8em 1.6em;
+	border: 2px solid var(--col-accent);
+	border-radius: 999px;
+	background-color: var(--col-accent);
+	color: var(--col-ink);
+	font-weight: var(--fw-700);
+	line-height: 1.2;
 	text-decoration: none;
 	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
 }
 
-.btn:focus-visible {
-		outline: 2px solid var(--col-primary);
-		outline-offset: 2px;
+.btn:hover {
+		background-color: var(--col-ink);
+		border-color: var(--col-ink);
+		color: var(--col-white);
 	}
+
+.btn:focus-visible {
+		outline: 3px solid var(--col-ink);
+		outline-offset: 3px;
+	}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+:is(.btn:disabled,.btn[aria-disabled="true"]):hover {
+		background-color: var(--col-accent);
+		border-color: var(--col-accent);
+		color: var(--col-ink);
+	}
+
+.btn--ghost {
+	background-color: transparent;
+	border-color: currentColor;
+	color: inherit;
+}
 
 /* Generated by src/build/generate-utilities.js — do not hand-edit. */
 
@@ -522,12 +899,84 @@ select {
 .text-start { text-align: left; }
 .text-center { text-align: center; }
 .text-end { text-align: right; }
-.fw-400 { font-weight: var(--fw-400); }
-.fw-600 { font-weight: var(--fw-600); }
-.fw-700 { font-weight: var(--fw-700); }
-.fw-normal { font-weight: var(--fw-normal); }
-.fw-semibold { font-weight: var(--fw-semibold); }
-.fw-bold { font-weight: var(--fw-bold); }
+.fw-col-white { font-weight: #ffffff; }
+.fw-col-black { font-weight: #000000; }
+.fw-col-forest-900 { font-weight: #1f2827; }
+.fw-col-forest-700 { font-weight: #303c3b; }
+.fw-col-forest-500 { font-weight: #4f6b66; }
+.fw-col-forest-300 { font-weight: #9db5ae; }
+.fw-col-forest-200 { font-weight: #c3d4ce; }
+.fw-col-forest-100 { font-weight: #e3ece8; }
+.fw-col-mist { font-weight: #f3f7f4; }
+.fw-col-lime-700 { font-weight: #6b7d0e; }
+.fw-col-lime-500 { font-weight: #b3cc1c; }
+.fw-col-lime-300 { font-weight: #dfe98c; }
+.fw-col-lime-200 { font-weight: #e8efae; }
+.fw-col-lime-100 { font-weight: #f1f6cf; }
+.fw-col-navy-900 { font-weight: #06203b; }
+.fw-col-navy-700 { font-weight: #0a345e; }
+.fw-col-navy-500 { font-weight: #3d6a9b; }
+.fw-col-navy-300 { font-weight: #9fb9d6; }
+.fw-col-navy-100 { font-weight: #dde8f3; }
+.fw-col-sky { font-weight: #f4f7fb; }
+.fw-col-pink-700 { font-weight: #b0178f; }
+.fw-col-pink-500 { font-weight: #fd78e1; }
+.fw-col-pink-300 { font-weight: #fdc1f1; }
+.fw-col-pink-100 { font-weight: #fee6fa; }
+.fw-col-ink { font-weight: var(--col-forest-900); }
+.fw-col-brand { font-weight: var(--col-forest-700); }
+.fw-col-brand-mid { font-weight: var(--col-forest-500); }
+.fw-col-brand-line { font-weight: var(--col-forest-300); }
+.fw-col-tint { font-weight: var(--col-forest-100); }
+.fw-col-surface { font-weight: var(--col-mist); }
+.fw-col-accent { font-weight: var(--col-lime-500); }
+.fw-col-accent-text { font-weight: var(--col-lime-700); }
+.fw-col-wash { font-weight: var(--col-lime-200); }
+.fw-col-wash-soft { font-weight: var(--col-lime-100); }
+.fw-col-primary { font-weight: var(--col-accent-text); }
+.fw-col-body { font-weight: var(--col-ink); }
+.fw-col-body-bg { font-weight: var(--col-surface); }
+.fw-font-family-base { font-weight: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.fw-font-family-display { font-weight: "Lemonado", "Montserrat", system-ui, sans-serif; }
+.fw-fs-base { font-weight: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem); }
+.fw-fs-lead { font-weight: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem); }
+.fw-fs-h1 { font-weight: clamp(2.8rem, 1.8rem + 4vw, 5rem); }
+.fw-fs-h2 { font-weight: clamp(2.2rem, 1.6rem + 2.4vw, 3.5rem); }
+.fw-fs-h3 { font-weight: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem); }
+.fw-fs-h4 { font-weight: 1.25rem; }
+.fw-fs-h5 { font-weight: 1.1rem; }
+.fw-fs-h6 { font-weight: 1rem; }
+.fw-fs-small { font-weight: 0.875rem; }
+.fw-fw-400 { font-weight: 400; }
+.fw-fw-600 { font-weight: 600; }
+.fw-fw-700 { font-weight: 700; }
+.fw-fw-normal { font-weight: var(--fw-400); }
+.fw-fw-semibold { font-weight: var(--fw-600); }
+.fw-fw-bold { font-weight: var(--fw-700); }
+.fw-line-height-base { font-weight: 1.7; }
+.fw-line-height-heading { font-weight: 1.04; }
+.fw-measure { font-weight: 62ch; }
+.fw-space-0 { font-weight: 0; }
+.fw-space-1 { font-weight: 0.25rem; }
+.fw-space-2 { font-weight: 0.5rem; }
+.fw-space-3 { font-weight: 1rem; }
+.fw-space-4 { font-weight: 1.5rem; }
+.fw-space-5 { font-weight: 3rem; }
+.fw-space-6 { font-weight: 5rem; }
+.fw-radius-sm { font-weight: 0.25rem; }
+.fw-radius-lg { font-weight: 0.5rem; }
+.fw-shadow-sm { font-weight: 0 1px 2px rgb(0 0 0 / 0.08); }
+.fw-shadow-lg { font-weight: 0 8px 24px rgb(0 0 0 / 0.12); }
+.fw-transition { font-weight: 150ms ease-in-out; }
+.fw-container-max-width { font-weight: 1320px; }
+.fw-container-padding { font-weight: var(--space-3); }
+.fw-grid-columns { font-weight: 12; }
+.fw-grid-gutter { font-weight: var(--space-3); }
+.fw-grid-min { font-weight: 16rem; }
+.fw-nav-height { font-weight: 4rem; }
+.fw-section-pad { font-weight: clamp(2.5rem, 1.75rem + 3.5vw, 4.5rem); }
+.fw-edge-height { font-weight: clamp(48px, 7vw, 90px); }
+.fw-edge-overlap { font-weight: calc(var(--edge-height) * 0.75); }
 .w-25 { width: 25%; }
 .w-50 { width: 50%; }
 .w-75 { width: 75%; }
@@ -1474,6 +1923,1073 @@ select {
 /* @import "accordion.css"; -- uncomment if this project actually needs styled accordions */
 /* Generated by src/build/generate-utilities.js — do not hand-edit.
    Concatenation of src/blocks/*.css, alphabetical by filename. */
+
+/* --- src/blocks/collaborators.css --- */
+.collaborators .lead {
+	margin-top: var(--space-2);
+}
+
+.collaborators__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+	gap: var(--space-5) var(--space-4);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* One item is one link: the title's link is stretched over the whole item */
+.collaborators__item {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+.collaborators__item h3 {
+		margin: var(--space-4) 0 var(--space-2);
+		font-size: var(--fs-h3);
+	}
+.collaborators__item p {
+		margin: 0 auto;
+		max-width: 28ch;
+	}
+
+/* Logo on a white disc, with a brush-stroke of the wash colour behind it.
+   The disc is its own stacking context: stroke at -2, white disc at -1, logo above. */
+.collaborators__disc {
+	position: relative;
+	isolation: isolate;
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 9.5rem;
+	aspect-ratio: 1;
+	transition: scale 250ms ease;
+}
+.collaborators__disc::before {
+		content: "";
+		position: absolute;
+		inset: -0.7rem -1.1rem -0.7rem -1.1rem;
+		z-index: -2;
+		background: var(--col-wash);
+		rotate: -7deg;
+		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+	}
+.collaborators__disc::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: 50%;
+		background: var(--col-white);
+		box-shadow: 0 6px 18px rgb(31 40 39 / 0.16);
+	}
+.collaborators__disc img {
+		width: 72%;
+		height: 72%;
+		object-fit: contain;
+	}
+.collaborators__item:nth-child(even) .collaborators__disc::before {
+	rotate: 6deg;
+}
+.collaborators__item:hover .collaborators__disc {
+	scale: 1.05;
+}
+
+.collaborators__link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.collaborators__link::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+	}
+
+.collaborators__link:hover {
+		text-decoration: none;
+	}
+
+.collaborators__link:focus-visible {
+		outline: none;
+	}
+.collaborators__item:has(a:focus-visible) {
+	outline: 3px solid var(--col-accent);
+	outline-offset: 8px;
+}
+.collaborators__item:hover .collaborators__link {
+	color: var(--col-accent-text);
+}
+
+.collaborators__visit {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	margin-top: var(--space-2);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+	color: var(--col-accent-text);
+}
+
+.collaborators__visit svg {
+		display: inline-block;
+	}
+
+@media (prefers-reduced-motion: reduce) {
+	.collaborators__disc {
+		transition: none;
+	}
+}
+
+/* --- src/blocks/contact-form.css --- */
+.contact__grid {
+	display: grid;
+	gap: var(--space-5);
+	align-items: start;
+}
+@media (min-width: 900px) {
+	.contact__grid {
+		grid-template-columns: 1fr 1.1fr;
+		gap: var(--space-6);
+	}
+}
+
+/* The details, one per row: a small label, then the link */
+.contact__details {
+	margin: var(--space-4) 0 0;
+}
+.contact__details > div {
+		display: grid;
+		grid-template-columns: 6.5rem 1fr;
+		gap: var(--space-2);
+		padding-block: 0.6em;
+		border-top: 1px solid var(--col-brand-line);
+	}
+.contact__details > div:last-child {
+		border-bottom: 1px solid var(--col-brand-line);
+	}
+.contact__details dt {
+		font-weight: var(--fw-700);
+	}
+.contact__details dd {
+		margin: 0;
+		overflow-wrap: anywhere;
+	}
+
+/* The form sits straight on the page, with a faint brush stroke of the wash colour behind it. */
+.contact__form {
+	position: relative;
+	isolation: isolate;
+}
+.contact__form::before {
+		content: "";
+		position: absolute;
+		inset: -2.2rem -2.6rem -2rem -2.6rem;
+		z-index: -1;
+		background: var(--col-wash);
+		opacity: 0.4;
+		rotate: 1.2deg;
+		mask: url("../img/brush/brush-photo.svg") center / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+.contact__form fieldset.hidden-fields-container {
+		display: none;
+	}
+.contact__form form {
+		display: grid;
+		gap: var(--space-3);
+	}
+.contact__form p {
+		margin: 0;
+		max-width: none;
+	}
+.contact__form label {
+		display: block;
+		margin: 0;
+		font-weight: var(--fw-700);
+	}
+.contact__form .wpcf7-form-control-wrap {
+		display: block;
+		margin-top: 0.35rem;
+	}
+.contact__form input[type="text"],.contact__form input[type="email"],.contact__form input[type="tel"],.contact__form textarea {
+		width: 100%;
+		padding: 0.75em 1em;
+		border: 2px solid var(--col-brand-mid);
+		border-radius: 0.75rem;
+		background: var(--col-white);
+		color: var(--col-ink);
+		font-weight: var(--fw-400);
+	}
+:is(.contact__form input[type="text"],.contact__form input[type="email"],.contact__form input[type="tel"],.contact__form textarea):focus-visible {
+			border-color: var(--col-brand);
+			outline: 3px solid var(--col-accent);
+			outline-offset: 1px;
+		}
+.contact__form textarea {
+		min-height: 9rem;
+		resize: vertical;
+	}
+.contact__form .wpcf7-acceptance label,.contact__form .wpcf7-list-item label {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6em;
+		font-size: var(--fs-small);
+		font-weight: var(--fw-400);
+	}
+:is(.contact__form .wpcf7-acceptance label,.contact__form .wpcf7-list-item label) input {
+			flex: none;
+			margin-top: 0.3em;
+		}
+.contact__form .wpcf7-list-item {
+		margin: 0;
+	}
+.contact__form .wpcf7-submit {
+		justify-self: start;
+	}
+.contact__form .wpcf7-not-valid-tip {
+		margin-top: 0.3rem;
+		font-size: var(--fs-small);
+		color: #b00020;
+	}
+/* CF7's own stylesheet is switched off, so this does what it did: no message box
+	   until there is a message. It is empty and in the "init" state until a submit. */
+.contact__form form.init .wpcf7-response-output,.contact__form .wpcf7-response-output:empty {
+		display: none;
+	}
+.contact__form .wpcf7-response-output {
+		margin: 0;
+		padding: 0.8em 1em;
+		border: 2px solid var(--col-brand-line);
+		border-radius: 0.75rem;
+		font-size: var(--fs-small);
+	}
+.contact__form form.sent .wpcf7-response-output {
+		border-color: var(--col-accent-text);
+	}
+.contact__form .wpcf7-spinner {
+		margin: 0 0 0 var(--space-2);
+	}
+
+/* --- src/blocks/cta-band.css --- */
+.cta-band__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+.cta-band__inner h2 {
+		margin-bottom: 0.2em;
+	}
+.cta-band__inner p {
+		margin-bottom: 0;
+	}
+@media (min-width: 800px) {
+	.cta-band__inner {
+		grid-template-columns: 1fr auto;
+	}
+}
+
+/* --- src/blocks/latest-news.css --- */
+.latest-news__filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	margin-top: var(--space-3);
+}
+/* hidden cards must stay hidden whatever display the grid gives them */
+.latest-news__card[hidden] {
+	display: none;
+}
+.latest-news__filters[hidden] {
+	display: none;
+}
+.latest-news__chip {
+	display: inline-flex;
+	background: none;
+	font: inherit;
+	cursor: pointer;
+	align-items: baseline;
+	gap: 0.4em;
+	padding: 0.45em 1.1em;
+	border: 2px solid var(--col-brand-line);
+	border-radius: 999px;
+	color: inherit;
+	font-weight: var(--fw-700);
+	text-decoration: none;
+	transition: background-color var(--transition), border-color var(--transition);
+}
+.latest-news__chip span {
+		font-weight: var(--fw-400);
+		font-size: var(--fs-small);
+		opacity: 0.7;
+	}
+.latest-news__chip:hover {
+		border-color: var(--col-accent);
+		text-decoration: none;
+	}
+.latest-news__chip[aria-pressed="true"] {
+		background: var(--col-accent);
+		border-color: var(--col-accent);
+	}
+.latest-news__chip:focus-visible {
+		outline: 3px solid var(--col-ink);
+		outline-offset: 3px;
+	}
+
+.latest-news__grid {
+	/* auto-fill, not the .grid default auto-fit, so cards keep their width
+	   when a filter leaves only one or two of them */
+	grid-template-columns: repeat(auto-fill, minmax(var(--grid-min), 1fr));
+	gap: var(--space-5) var(--space-4);
+	margin-top: var(--space-4);
+}
+
+/* No card box: the photo, a brush label and the text sit straight on the page. */
+.latest-news__card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	color: var(--col-ink);
+
+	/* Keyboard focus lands on the title link, so ring the whole card */
+}
+.latest-news__card:has(a:focus-visible) {
+		outline: 3px solid var(--col-accent);
+		outline-offset: 6px;
+	}
+
+.latest-news__figure {
+	position: relative;
+	margin-bottom: var(--space-4);
+}
+
+.latest-news__media {
+	display: block;
+	position: relative;
+	aspect-ratio: 3 / 2;
+	background: var(--col-tint);
+	box-shadow: 0 6px 18px rgb(31 40 39 / 0.18);
+	transition: rotate 300ms ease;
+
+	/* Filled absolutely so a short or wide photo can never shrink the box */
+}
+
+.latest-news__media img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+/* Alternating tilt, like prints pinned to a wall; straightens on hover */
+.latest-news__card:nth-child(odd) .latest-news__media {
+	rotate: -1.4deg;
+}
+.latest-news__card:nth-child(even) .latest-news__media {
+	rotate: 1.1deg;
+}
+.latest-news__card:hover .latest-news__media {
+	rotate: 0deg;
+}
+
+.latest-news__pill {
+	position: absolute;
+	left: var(--space-2);
+	bottom: 0;
+	z-index: 1;
+	isolation: isolate;
+	padding: 0.35em 1.1em 0.45em;
+	font-family: var(--font-family-display);
+	font-size: 1.25rem;
+	line-height: 1.05;
+	color: var(--col-brand);
+	transform: translateY(45%) rotate(-3deg);
+}
+
+.latest-news__pill::before {
+		content: "";
+		position: absolute;
+		inset: -0.2em -0.4em;
+		z-index: -1;
+		background: var(--col-wash);
+		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+	}
+
+.latest-news__body {
+	padding-top: var(--space-2);
+}
+
+.latest-news__body h3 {
+		margin: 0.15em 0 0.3em;
+		font-size: var(--fs-h3);
+	}
+
+:is(.latest-news__body h3) a {
+			color: inherit;
+			text-decoration: none;
+
+			/* Stretched link: the title link covers the whole card, so the photo,
+			   meta line and title are all one click target. */
+		}
+
+:is(:is(.latest-news__body h3) a)::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				z-index: 2;
+			}
+
+:is(:is(.latest-news__body h3) a):focus-visible {
+				outline: none;
+			}
+
+.latest-news__body p {
+		margin: 0;
+	}
+
+.latest-news__card:hover h3 a {
+	color: var(--col-accent-text);
+	text-decoration: none;
+}
+.latest-news__card:hover {
+	cursor: pointer;
+}
+
+.latest-news__meta {
+	font-size: var(--fs-small);
+	color: var(--col-brand-mid);
+}
+
+[data-surface="brand"] .latest-news__card {
+	color: var(--col-white);
+}
+
+.latest-news__excerpt {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	overflow: hidden;
+}
+
+.latest-news__pager {
+	margin-top: var(--space-5);
+}
+
+.latest-news__pager .page-numbers {
+		display: inline-block;
+		padding: 0.4em 0.9em;
+		border-radius: 999px;
+		text-decoration: none;
+	}
+
+.latest-news__pager a.page-numbers:hover {
+		background: var(--col-tint);
+	}
+
+.latest-news__pager .current {
+		background: var(--col-accent);
+		font-weight: var(--fw-700);
+	}
+
+@media (prefers-reduced-motion: reduce) {
+	.latest-news__media {
+		transition: none;
+	}
+}
+
+/* --- src/blocks/newsletter-band.css --- */
+.newsletter-band__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+.newsletter-band__inner h2 {
+		margin-bottom: 0.15em;
+	}
+.newsletter-band__inner p {
+		margin: 0;
+	}
+
+/* Mailchimp for WP's form (its own markup, set up in the plugin): email, first and
+   last name, the privacy consent line, then the button. */
+.newsletter-band__form .mc4wp-form-fields {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-2);
+	}
+.newsletter-band__form p {
+		margin: 0;
+		max-width: none;
+	}
+.newsletter-band__form label.w-100 {
+		display: block;
+		margin: 0;
+	}
+.newsletter-band__form .form-control {
+		width: 100%;
+		padding: 0.8em 1.2em;
+		border: 2px solid transparent;
+		border-radius: 999px;
+		background: var(--col-white);
+		color: var(--col-ink);
+	}
+:is(.newsletter-band__form .form-control):focus-visible {
+			outline: 3px solid var(--col-accent);
+			outline-offset: 2px;
+		}
+.newsletter-band__form .form-check {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6em;
+		font-size: var(--fs-small);
+	}
+:is(.newsletter-band__form .form-check) input {
+			flex: none;
+			margin-top: 0.3em;
+		}
+:is(.newsletter-band__form .form-check) a {
+			color: inherit;
+			text-decoration: underline;
+		}
+.newsletter-band__form .btn,.newsletter-band__form input[type="submit"] {
+		width: 100%;
+		margin-top: var(--space-1);
+	}
+.newsletter-band__form .mc4wp-response {
+		margin-top: var(--space-2);
+		font-weight: var(--fw-700);
+	}
+.newsletter-band__form .mc4wp-alert {
+		margin: 0;
+	}
+@media (min-width: 560px) {
+	.newsletter-band__form .mc4wp-form-fields > label:nth-of-type(2),
+	.newsletter-band__form .mc4wp-form-fields > label:nth-of-type(3) {
+		grid-column: span 1;
+	}
+	.newsletter-band__form .mc4wp-form-fields {
+		grid-template-columns: 1fr 1fr;
+	}
+	.newsletter-band__form .mc4wp-form-fields > label:first-child,
+	.newsletter-band__form .mc4wp-form-fields > p,
+	.newsletter-band__form .mc4wp-form-fields > input[type="submit"],
+	.newsletter-band__form .mc4wp-form-fields > .form-check {
+		grid-column: 1 / -1;
+	}
+}
+[data-surface="brand"] .newsletter-band__form .btn:hover {
+	background: var(--col-white);
+	border-color: var(--col-white);
+	color: var(--col-ink);
+}
+
+@media (min-width: 800px) {
+	.newsletter-band__inner {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-6);
+	}
+}
+
+/* --- src/blocks/page-hero.css --- */
+.page-hero {
+	position: relative;
+	overflow: hidden;
+	padding-top: clamp(5rem, 3.5rem + 9vw, 11rem);
+	min-height: clamp(24rem, 18rem + 22vw, 36rem);
+}
+.page-hero__inner {
+	position: relative;
+	z-index: 1;
+}
+.page-hero h1 {
+	max-width: 14ch;
+	margin-bottom: 0.3em;
+}
+.page-hero .lead {
+	max-width: 46ch;
+	margin-bottom: var(--space-4);
+}
+.page-hero--image .page-hero__media {
+	position: absolute;
+	inset: 0;
+}
+:is(.page-hero--image .page-hero__media) img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+:is(.page-hero--image .page-hero__media)::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(90deg, rgb(31 40 39 / 0.85) 0, rgb(31 40 39 / 0.45) 60%, rgb(31 40 39 / 0.2) 100%);
+	}
+body.theme-fitness .page-hero--image .page-hero__media::after {
+	background: linear-gradient(90deg, rgb(6 32 59 / 0.88) 0, rgb(6 32 59 / 0.5) 60%, rgb(6 32 59 / 0.2) 100%);
+}
+
+/* Deeper than other blocks: more room under the copy, before the brush edge */
+.page-hero.section.brush-edge {
+	padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap) + clamp(1.5rem, 5vw, 4.5rem));
+}
+
+/* --- src/blocks/post.css --- */
+.post__body {
+	max-width: 46rem;
+}
+.post__body > * + * {
+		margin-top: 1.1em;
+	}
+.post__body h2,.post__body h3,.post__body h4 {
+		margin-top: 1.6em;
+	}
+.post__body h2 {
+		font-size: var(--fs-h3);
+	}
+.post__body h3,.post__body h4 {
+		font-family: var(--font-family-base);
+		font-size: var(--fs-lead);
+		font-weight: var(--fw-700);
+		line-height: 1.25;
+		letter-spacing: 0;
+	}
+.post__body ul,.post__body ol {
+		padding-left: 1.25em;
+	}
+.post__body img {
+		border-radius: var(--radius-lg);
+	}
+.post__body figure {
+		margin-inline: 0;
+	}
+.post__body .alignleft {
+		float: left;
+		margin: 0.3em 1.5em 1em 0;
+		max-width: 50%;
+	}
+.post__body .alignright {
+		float: right;
+		margin: 0.3em 0 1em 1.5em;
+		max-width: 50%;
+	}
+.post__body .aligncenter,.post__body .alignnone {
+		margin-inline: auto;
+	}
+.post__body iframe {
+		max-width: 100%;
+	}
+.post__body::after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+.post__terms {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+}
+.post__terms li {
+		padding: 0.3em 0.9em;
+		border-radius: 999px;
+		background: var(--col-wash);
+		font-size: var(--fs-small);
+	}
+
+/* --- src/blocks/pullquote.css --- */
+/* One quote, set large. Shared by the single pullquote and the slider's slides. */
+.pullquote__figure {
+	position: relative;
+	max-width: 62rem;
+	margin: 0 auto;
+	padding-top: 3.5rem;
+	text-align: center;
+
+	/* the opening mark, in the accent colour */
+}
+.pullquote__figure::before {
+		content: "\201C";
+		position: absolute;
+		top: -0.35rem;
+		left: 50%;
+		translate: -50% 0;
+		font-family: var(--font-family-display);
+		font-size: 6.5rem;
+		line-height: 1;
+		color: var(--col-accent-text);
+	}
+.pullquote__figure blockquote {
+		margin: 0;
+	}
+.pullquote__figure blockquote p {
+		max-width: none;
+		margin: 0;
+		font-size: clamp(1.25rem, 1.05rem + 1vw, 1.75rem);
+		line-height: 1.5;
+		text-wrap: pretty;
+	}
+.pullquote__figure figcaption {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15em;
+		margin-top: var(--space-4);
+	}
+.pullquote__figure figcaption span {
+		font-size: var(--fs-small);
+		opacity: 0.8;
+	}
+[data-surface="brand"] .pullquote__figure::before {
+	color: var(--col-accent);
+}
+
+/* Slider: a scroll-snap track, one quote per view */
+.pullquote-slider__frame {
+	margin-top: var(--space-4);
+}
+.pullquote-slider__track {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	scroll-behavior: smooth;
+}
+.pullquote-slider__track::-webkit-scrollbar {
+		display: none;
+	}
+.pullquote-slider__track:focus-visible {
+		outline: 3px solid var(--col-accent);
+		outline-offset: 4px;
+	}
+.pullquote-slider__slide {
+	flex: 0 0 100%;
+	max-width: none; /* the site-wide li measure would otherwise shrink the slide */
+	scroll-snap-align: center;
+	padding-inline: var(--space-2);
+}
+.pullquote-slider__controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-3);
+	margin-top: var(--space-4);
+}
+.pullquote-slider__controls[hidden] {
+		display: none;
+	}
+.pullquote-slider__btn {
+	display: grid;
+	place-items: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	padding: 0;
+	border: 2px solid currentColor;
+	border-radius: 50%;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+}
+.pullquote-slider__btn:hover,.pullquote-slider__btn:focus-visible {
+		background: var(--col-accent);
+		border-color: var(--col-accent);
+		color: var(--col-ink);
+	}
+.pullquote-slider__btn:focus-visible {
+		outline: 3px solid var(--col-ink);
+		outline-offset: 3px;
+	}
+.pullquote-slider__count {
+	min-width: 4.5ch;
+	text-align: center;
+	font-weight: var(--fw-700);
+	font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+	.pullquote-slider__track {
+		scroll-behavior: auto;
+	}
+}
+
+/* --- src/blocks/social-band.css --- */
+.social-band__inner {
+	display: grid;
+	gap: var(--space-4);
+	align-items: center;
+}
+.social-band__inner h2 {
+		margin-bottom: 0.15em;
+	}
+.social-band__inner p {
+		margin: 0;
+	}
+.social-band__btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6em;
+	justify-self: start;
+}
+@media (min-width: 800px) {
+	.social-band__inner {
+		grid-template-columns: 1fr auto;
+	}
+	.social-band__btn {
+		justify-self: end;
+	}
+}
+
+/* --- src/blocks/text-image.css --- */
+.text-image__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-5);
+	align-items: center;
+}
+.text-image__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+/* "original" shows the whole photo, so the box takes the photo's own shape */
+.text-image__media[data-ratio="original"] img {
+		height: auto;
+	}
+.text-image__media[data-ratio="landscape"] {
+		aspect-ratio: 3 / 2;
+	}
+.text-image__media[data-ratio="widescreen"] {
+		aspect-ratio: 16 / 9;
+	}
+.text-image__media[data-ratio="square"] {
+		aspect-ratio: 1;
+	}
+.text-image__media[data-ratio="portrait"] {
+		aspect-ratio: 3 / 4;
+	}
+@media (min-width: 800px) {
+	.text-image__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+	.text-image--left .text-image__media {
+		order: -1;
+	}
+}
+
+/* Video behind a play button: the poster shows until it is clicked, then the
+   player opens in a pop-out (src/js/video-facade.js). */
+.video-facade,
+.video-facade__frame {
+	display: block;
+	width: 100%;
+	aspect-ratio: var(--video-aspect, 16 / 9);
+	border: 0;
+	border-radius: var(--radius-lg);
+}
+
+.video-facade {
+	position: relative;
+	padding: 0;
+	overflow: hidden;
+	background: var(--col-brand);
+	box-shadow: 0 6px 18px rgb(31 40 39 / 0.18);
+	cursor: pointer;
+}
+
+.video-facade__poster {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.video-facade__play {
+	position: absolute;
+	inset: 50% auto auto 50%;
+	width: 4.5rem;
+	height: 4.5rem;
+	translate: -50% -50%;
+	border-radius: 50%;
+	background: var(--col-white);
+	box-shadow: 0 4px 14px rgb(0 0 0 / 0.3);
+	transition: scale var(--transition);
+}
+
+.video-facade__play::after {
+		content: "";
+		position: absolute;
+		inset: 50% auto auto 54%;
+		width: 1.4rem;
+		height: 1.4rem;
+		translate: -50% -50%;
+		background: var(--col-brand);
+		clip-path: polygon(0 0, 100% 50%, 0 100%);
+	}
+
+.video-facade:hover .video-facade__play,
+.video-facade:focus-visible .video-facade__play {
+	scale: 1.1;
+}
+
+/* The brush mask on the wrapper would clip an outline on the button itself,
+   so keyboard focus rings the play button instead. */
+.video-facade:focus-visible {
+	outline: none;
+}
+.video-facade:focus-visible .video-facade__play {
+	outline: 3px solid var(--col-accent);
+	outline-offset: 4px;
+}
+
+/* With the brush edge on, the mask does the shaping */
+.text-image__media--video.brush-photo .video-facade {
+	border-radius: 0;
+	box-shadow: none;
+}
+
+/* One shared <dialog> sized to the viewport, the close button above its top right corner. */
+.video-modal {
+	width: min(90vw, 70rem, calc(80vh * 16 / 9));
+	max-width: none;
+	padding: 0;
+	overflow: visible;
+	border: 0;
+	background: var(--col-black);
+}
+.video-modal::backdrop {
+		background: rgb(0 0 0 / 0.8);
+	}
+
+.video-modal__inner {
+	aspect-ratio: 16 / 9;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+}
+
+.video-modal .video-facade__frame {
+	height: 100%;
+	border-radius: 0;
+}
+
+.video-modal__close {
+	position: absolute;
+	right: 0;
+	bottom: 100%;
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	margin-bottom: var(--space-2);
+	padding: 0;
+	border: 2px solid var(--col-white);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--col-white);
+	font-size: var(--fs-h3);
+	line-height: 1;
+	cursor: pointer;
+}
+
+.video-modal__close:hover,.video-modal__close:focus-visible {
+		background: var(--col-white);
+		color: var(--col-black);
+	}
+
+@media (prefers-reduced-motion: reduce) {
+	.video-facade__play {
+		transition: none;
+	}
+}
+
+/* --- src/blocks/text-section.css --- */
+.text-section__body > * + * {
+		margin-top: 1.1em;
+	}
+.text-section__body ul,.text-section__body ol {
+		padding-left: 1.25em;
+	}
+.text-section--center {
+	text-align: center;
+}
+.text-section--center p,.text-section--center li {
+		margin-inline: auto;
+	}
+
+/* --- src/blocks/tile-links.css --- */
+.tile-links__grid {
+	gap: var(--space-4);
+	margin-top: var(--space-4);
+}
+.tile-links__tile {
+	display: block;
+	color: var(--col-white);
+	text-decoration: none;
+}
+.tile-links__tile:hover img {
+		transform: scale(1.04);
+	}
+.tile-links__tile:focus-visible {
+		outline: 3px solid var(--col-accent);
+		outline-offset: 4px;
+	}
+/* The mask sits on an inner frame so the focus outline on the link isn't clipped. */
+.tile-links__frame {
+	position: relative;
+	display: block;
+	aspect-ratio: 3 / 2;
+	overflow: hidden;
+	mask: var(--tile-mask) center / 100% 100% no-repeat;
+}
+.tile-links__frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 400ms ease;
+	}
+.tile-links__frame::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, transparent 40%, rgb(31 40 39 / 0.85));
+	}
+/* Three slightly different edges, repeating, so neighbours don't look stamped */
+.tile-links__tile:nth-child(3n + 1) { --tile-mask: url("../img/brush/brush-tile-1.svg?v=2"); }
+.tile-links__tile:nth-child(3n + 2) { --tile-mask: url("../img/brush/brush-tile-2.svg?v=2"); }
+.tile-links__tile:nth-child(3n) { --tile-mask: url("../img/brush/brush-tile-3.svg?v=2"); }
+.tile-links__title {
+	position: absolute;
+	z-index: 1;
+	inset: auto var(--space-4) var(--space-4);
+	font-family: var(--font-family-display);
+	font-size: var(--fs-h3);
+	line-height: 1.04;
+}
+@media (prefers-reduced-motion: reduce) {
+	.tile-links__frame img {
+		transition: none;
+	}
+}
+
+.tile-links__grid[data-ratio="square"] .tile-links__frame {
+	aspect-ratio: 1;
+}
+.tile-links__grid[data-ratio="portrait"] .tile-links__frame {
+	aspect-ratio: 3 / 4;
+}
+.tile-links__grid[data-ratio="original"] .tile-links__frame {
+	aspect-ratio: auto;
+}
+:is(.tile-links__grid[data-ratio="original"] .tile-links__frame) img {
+		height: auto;
+	}
 /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 /*# sourceMappingURL=theme.css.map */

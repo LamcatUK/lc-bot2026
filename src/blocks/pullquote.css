@@ -1,0 +1,120 @@
+/* One quote, set large. Shared by the single pullquote and the slider's slides. */
+.pullquote__figure {
+	position: relative;
+	max-width: 62rem;
+	margin: 0 auto;
+	padding-top: 3.5rem;
+	text-align: center;
+
+	/* the opening mark, in the accent colour */
+	&::before {
+		content: "\201C";
+		position: absolute;
+		top: -0.35rem;
+		left: 50%;
+		translate: -50% 0;
+		font-family: var(--font-family-display);
+		font-size: 6.5rem;
+		line-height: 1;
+		color: var(--col-accent-text);
+	}
+
+	& blockquote {
+		margin: 0;
+	}
+	& blockquote p {
+		max-width: none;
+		margin: 0;
+		font-size: clamp(1.25rem, 1.05rem + 1vw, 1.75rem);
+		line-height: 1.5;
+		text-wrap: pretty;
+	}
+	& figcaption {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15em;
+		margin-top: var(--space-4);
+	}
+	& figcaption span {
+		font-size: var(--fs-small);
+		opacity: 0.8;
+	}
+}
+[data-surface="brand"] .pullquote__figure::before {
+	color: var(--col-accent);
+}
+
+/* Slider: a scroll-snap track, one quote per view */
+.pullquote-slider__frame {
+	margin-top: var(--space-4);
+}
+.pullquote-slider__track {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	scroll-behavior: smooth;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+	&:focus-visible {
+		outline: 3px solid var(--col-accent);
+		outline-offset: 4px;
+	}
+}
+.pullquote-slider__slide {
+	flex: 0 0 100%;
+	max-width: none; /* the site-wide li measure would otherwise shrink the slide */
+	scroll-snap-align: center;
+	padding-inline: var(--space-2);
+}
+.pullquote-slider__controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-3);
+	margin-top: var(--space-4);
+
+	&[hidden] {
+		display: none;
+	}
+}
+.pullquote-slider__btn {
+	display: grid;
+	place-items: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	padding: 0;
+	border: 2px solid currentColor;
+	border-radius: 50%;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	transition: background-color var(--transition), color var(--transition);
+
+	&:hover,
+	&:focus-visible {
+		background: var(--col-accent);
+		border-color: var(--col-accent);
+		color: var(--col-ink);
+	}
+	&:focus-visible {
+		outline: 3px solid var(--col-ink);
+		outline-offset: 3px;
+	}
+}
+.pullquote-slider__count {
+	min-width: 4.5ch;
+	text-align: center;
+	font-weight: var(--fw-700);
+	font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+	.pullquote-slider__track {
+		scroll-behavior: auto;
+	}
+}

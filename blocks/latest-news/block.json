@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/latest-news",
+	"title": "Latest Posts",
+	"category": "lc-bot2026",
+	"icon": "list-view",
+	"description": "A grid of posts from one blog term, with optional exclusion and paging. Hiking and fitness posts are told apart by term.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "" },
+		"term": { "type": "string", "default": "" },
+		"excludeTerm": { "type": "string", "default": "" },
+		"count": { "type": "number", "default": 6 },
+		"paginate": { "type": "boolean", "default": false },
+		"showExcerpt": { "type": "boolean", "default": true },
+		"showTerm": { "type": "boolean", "default": true },
+		"showFilters": { "type": "boolean", "default": false },
+		"surface": { "type": "string", "default": "surface" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}
