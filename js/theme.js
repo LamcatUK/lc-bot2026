@@ -87,7 +87,14 @@
 	  document.querySelectorAll('[data-dialog-target]').forEach(trigger => {
 	    const dialog = document.getElementById(trigger.getAttribute('data-dialog-target'));
 	    if (!(dialog instanceof HTMLDialogElement)) return;
-	    trigger.addEventListener('click', () => dialog.showModal());
+	    trigger.addEventListener('click', () => {
+	      dialog.showModal();
+	      // Lenis would keep scrolling the page behind the dialog.
+	      if (window.lcLenis) window.lcLenis.stop();
+	    });
+	    dialog.addEventListener('close', () => {
+	      if (window.lcLenis) window.lcLenis.start();
+	    });
 	    dialog.querySelectorAll('[data-dialog-close]').forEach(closeBtn => {
 	      closeBtn.addEventListener('click', () => dialog.close());
 	    });
@@ -168,6 +175,10 @@
 	  });
 	  dialog.addEventListener('close', () => {
 	    inner.innerHTML = '';
+	    // Lenis was stopped while the pop-out was open.
+	    if (window.lcLenis) {
+	      window.lcLenis.start();
+	    }
 	    if (dialog.opener && document.contains(dialog.opener)) {
 	      dialog.opener.focus();
 	    }
@@ -226,6 +237,10 @@
 	      modal.setAttribute('aria-label', facade.getAttribute('data-title') || 'Video');
 	      modal.opener = facade;
 	      modal.showModal();
+	      // Lenis would keep scrolling the page behind the pop-out.
+	      if (window.lcLenis) {
+	        window.lcLenis.stop();
+	      }
 	      return;
 	    }
 	    const frame = createFrame(facade);
@@ -266,6 +281,213 @@
 	  });
 	}
 
+	/**
+	 * Removing the last item from the basket updates the page in place through
+	 * WooCommerce's script, which leaves the page empty. Reloading shows the empty
+	 * basket message and clears the header basket icon.
+	 */
+	function initCart() {
+	  if (!window.jQuery) return;
+	  window.jQuery(document.body).on('wc_cart_emptied', () => window.location.reload());
+	}
+
+	/**
+	 * Smooth scrolling with Lenis (js/vendor/lenis.min.js, loaded before this).
+	 * The instance is window.lcLenis, so other code can stop() and start() it.
+	 *
+	 * Off for visitors who ask for reduced motion, and on touch devices Lenis does
+	 * not take over (syncTouch is off), so phones and tablets scroll natively.
+	 *
+	 *  - An element with its own scrollbar needs data-lenis-prevent, or the page
+	 *    scrolls instead of the element. (The open mobile menu has it.)
+	 *  - Anything that locks the page (a dialog) calls lcLenis.stop() and start().
+	 *  - In-page links (#section) are handled here so the page glides and keyboard
+	 *    focus still moves to the target.
+	 */
+	function initSmoothScroll() {
+	  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	  if (typeof window.Lenis !== 'function' || reduce) {
+	    return;
+	  }
+
+	  // autoRaf: Lenis runs its own animation loop. A lower lerp feels softer.
+	  const lenis = new window.Lenis({
+	    autoRaf: true,
+	    anchors: false,
+	    lerp: 0.09
+	  });
+	  window.lcLenis = lenis;
+	  document.addEventListener('click', event => {
+	    const link = event.target.closest('a[href^="#"]');
+	    if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) {
+	      return;
+	    }
+	    const id = decodeURIComponent(link.getAttribute('href').slice(1));
+	    const target = id ? document.getElementById(id) : document.body;
+	    if (!target) {
+	      return;
+	    }
+	    event.preventDefault();
+	    lenis.scrollTo(target, {
+	      offset: -(parseFloat(getComputedStyle(target).scrollMarginTop) || 0),
+	      onComplete: () => {
+	        if (id) {
+	          if (!target.hasAttribute('tabindex') && !/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(target.tagName)) {
+	            target.setAttribute('tabindex', '-1');
+	          }
+	          target.focus({
+	            preventScroll: true
+	          });
+	          window.history.pushState(null, '', `#${id}`);
+	        }
+	      }
+	    });
+	  });
+	}
+
+	/**
+	 * The site's motion, all in one place. GSAP and ScrollTrigger are loaded before
+	 * this (js/vendor/). Everything here is skipped for visitors who ask for reduced
+	 * motion, and if anything is missing the page simply shows as it is.
+	 *
+	 *  1. Entrance: text and tiles rise into place as they scroll into view.
+	 *  2. Hero: the heading, intro and button rise on load; the photo drifts slower
+	 *     than the page (parallax).
+	 *  3. Photos in a brush mask drift slightly inside their frame.
+	 *  3b. The fern watermark drifts behind its section.
+	 *  4. Pill strokes paint on left to right. Brush section edges are static.
+	 *
+	 * CSS (src/css/motion.css) hides the starting states only while <html> has
+	 * .js-motion, which a script in <head> sets before paint.
+	 */
+	const REVEAL = ['.text-image__copy', '.text-image__media', '.text-section__body', '.tile-links__tile', '.latest-news__card', '.collaborators__item', '.feature-columns__item', '.hikes-list__item', '.faq__item', '.pullquote__figure', '.contact__copy', '.contact__form', '.cta-band__inner', '.social-band__inner', '.newsletter-band__inner'].join(',');
+	function initMotion() {
+	  const root = document.documentElement;
+	  const {
+	    gsap,
+	    ScrollTrigger
+	  } = window;
+	  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	  if (reduce || !gsap || !ScrollTrigger || !root.classList.contains('js-motion')) {
+	    root.classList.remove('js-motion');
+	    return;
+	  }
+	  gsap.registerPlugin(ScrollTrigger);
+
+	  // Lenis owns the scrolling, so tell ScrollTrigger whenever it moves.
+	  if (window.lcLenis) {
+	    window.lcLenis.on('scroll', ScrollTrigger.update);
+	  }
+	  const groups = new Map();
+	  document.querySelectorAll(REVEAL).forEach(el => {
+	    const parent = el.parentElement;
+	    const n = groups.get(parent) || 0;
+	    groups.set(parent, n + 1);
+	    el.style.setProperty('--i', String(Math.min(n, 5)));
+	  });
+	  // Quotes in the slider scroll sideways rather than into view: show them all at once.
+	  document.querySelectorAll('.pullquote-slider__slide .pullquote__figure').forEach(el => el.classList.add('is-in'));
+	  const io = new IntersectionObserver(entries => {
+	    entries.forEach(entry => {
+	      if (entry.isIntersecting) {
+	        entry.target.classList.add('is-in');
+	        io.unobserve(entry.target);
+	      }
+	    });
+	  }, {
+	    threshold: 0,
+	    rootMargin: '0px 0px -8% 0px'
+	  } // threshold 0: a block taller than the screen can never be 12% visible at once, and would stay hidden
+	  );
+	  document.querySelectorAll(REVEAL).forEach(el => io.observe(el));
+
+	  // 2. Hero: copy rises on load, photo drifts.
+	  document.querySelectorAll('.page-hero').forEach(hero => {
+	    const copy = hero.querySelectorAll('.page-hero__inner > *');
+	    gsap.fromTo(copy, {
+	      y: 36,
+	      opacity: 0
+	    }, {
+	      y: 0,
+	      opacity: 1,
+	      duration: 0.9,
+	      ease: 'power3.out',
+	      stagger: 0.12,
+	      delay: 0.15,
+	      clearProps: 'transform,opacity'
+	    });
+	    const img = hero.querySelector('.page-hero__media img');
+	    if (img) {
+	      gsap.fromTo(img, {
+	        yPercent: -7,
+	        scale: 1.14
+	      }, {
+	        yPercent: 7,
+	        scale: 1.14,
+	        ease: 'none',
+	        scrollTrigger: {
+	          trigger: hero,
+	          start: 'top top',
+	          end: 'bottom top',
+	          scrub: true
+	        }
+	      });
+	    }
+	  });
+
+	  // 3. Photos in a brush mask, and image bands: the picture drifts inside its frame.
+	  document.querySelectorAll('.text-image__media.brush-photo img, .cta-band__media img, .pullquote__media img').forEach(img => {
+	    const frame = img.closest('.text-image__media, .cta-band__media, .pullquote__media');
+	    gsap.fromTo(img, {
+	      yPercent: -6,
+	      scale: 1.12
+	    }, {
+	      yPercent: 6,
+	      scale: 1.12,
+	      ease: 'none',
+	      scrollTrigger: {
+	        trigger: frame,
+	        start: 'top bottom',
+	        end: 'bottom top',
+	        scrub: true
+	      }
+	    });
+	  });
+
+	  // Fern watermark: the background drifts a little slower than the section.
+	  document.querySelectorAll('.fern-left, .fern-right, .fern-both, #footer').forEach(el => {
+	    gsap.fromTo(el, {
+	      '--fern-y': -18
+	    }, {
+	      '--fern-y': 12,
+	      ease: 'none',
+	      scrollTrigger: {
+	        trigger: el,
+	        start: 'top bottom',
+	        end: 'bottom top',
+	        scrub: true
+	      }
+	    });
+	  });
+
+	  // 4. Pill strokes paint on left to right. Section edges are static.
+	  document.querySelectorAll('.pill').forEach(el => {
+	    gsap.fromTo(el, {
+	      '--paint': 0
+	    }, {
+	      '--paint': 1,
+	      duration: 1.3,
+	      ease: 'power1.inOut',
+	      scrollTrigger: {
+	        trigger: el,
+	        start: 'top 92%',
+	        once: true
+	      }
+	    });
+	  });
+	  root.classList.add('js-motion-ready');
+	}
+
 	document.addEventListener('DOMContentLoaded', () => {
 	  initNavToggle();
 	  initNavDropdowns();
@@ -273,6 +495,9 @@
 	  initPostFilters();
 	  initVideoFacades();
 	  initQuoteSliders();
+	  initCart();
+	  initSmoothScroll();
+	  initMotion();
 	});
 
 })();

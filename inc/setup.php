@@ -22,6 +22,7 @@ function lc_bot2026_setup() {
 	add_theme_support( 'align-wide' );
 	add_theme_support( 'editor-styles' );
 	add_theme_support( 'disable-custom-colors' );
+	add_theme_support( 'woocommerce' ); // Hikes are WooCommerce products booked with FooEvents.
 
 	// Rename/extend per project.
 	register_nav_menus(

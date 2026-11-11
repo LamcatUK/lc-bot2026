@@ -52,8 +52,8 @@
 		z-index: -2;
 		background: var(--col-wash);
 		rotate: -7deg;
-		-webkit-mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		-webkit-mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
 	}
 
 	&::after {
@@ -202,6 +202,8 @@
 	& input[type="text"],
 	& input[type="email"],
 	& input[type="tel"],
+	& input[type="number"],
+	& select,
 	& textarea {
 		width: 100%;
 		padding: 0.75em 1em;
@@ -282,6 +284,340 @@
 @media (min-width: 800px) {
 	.cta-band__inner {
 		grid-template-columns: 1fr auto;
+	}
+}
+
+/* With a background photo: dark scrim, taller, the photo drifts (motion.js). */
+.cta-band--image {
+	position: relative;
+	padding-block: calc(var(--section-pad) * 1.3);
+}
+.cta-band__media {
+	position: absolute;
+	inset: 0;
+	overflow: hidden; /* clips the drifting photo, not the section, so the brush edge can overhang */
+
+	& img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(90deg, rgb(31 40 39 / 0.82) 0, rgb(31 40 39 / 0.5) 65%, rgb(31 40 39 / 0.3) 100%);
+	}
+}
+.cta-band--image .cta-band__inner {
+	position: relative;
+	z-index: 1;
+}
+body.theme-fitness .cta-band__media::after {
+	background: linear-gradient(90deg, rgb(6 32 59 / 0.85) 0, rgb(6 32 59 / 0.5) 65%, rgb(6 32 59 / 0.3) 100%);
+}
+/* With a brush edge at the top, the photo itself reaches up into the edge zone
+   and is masked by the brush shape (no separate coloured edge). The mask lives on
+   a flipped box, like the other brush edges, and the content is flipped back. */
+.cta-band--image.brush-top::before {
+	display: none;
+}
+.cta-band--image.brush-top .cta-band__media {
+	top: calc(1px - var(--edge-height));
+	transform: scaleY(-1);
+	-webkit-mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% var(--edge-height) no-repeat, linear-gradient(#000, #000) center top / 100% calc(100% - var(--edge-height) + 1px) no-repeat;
+	mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% var(--edge-height) no-repeat, linear-gradient(#000, #000) center top / 100% calc(100% - var(--edge-height) + 1px) no-repeat;
+}
+.cta-band__media-inner {
+	position: absolute;
+	inset: 0;
+}
+.cta-band--image.brush-top .cta-band__media-inner {
+	transform: scaleY(-1);
+}
+.cta-band__media-inner img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* --- src/blocks/faq.css --- */
+.faq__inner {
+	display: grid;
+	gap: var(--space-4);
+}
+
+/* the list is the narrow part, so the heading stays on the page's left edge */
+.faq__list {
+	max-width: 56rem;
+	border-top: 2px solid var(--col-brand-line);
+}
+
+.faq__item {
+	border-bottom: 2px solid var(--col-brand-line);
+
+	& summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		padding-block: var(--space-3);
+		font-size: var(--fs-lead);
+		font-weight: var(--fw-700);
+		line-height: 1.3;
+		cursor: pointer;
+		list-style: none;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+		/* plus that turns into a minus when open */
+		&::after {
+			content: "+";
+			flex: none;
+			display: grid;
+			place-items: center;
+			width: 2rem;
+			height: 2rem;
+			border-radius: 50%;
+			background: var(--col-wash);
+			font-size: 1.5rem;
+			line-height: 1;
+			transition: rotate 200ms ease;
+		}
+		&:hover {
+			color: var(--col-accent-text);
+		}
+		&:focus-visible {
+			outline: 3px solid var(--col-accent);
+			outline-offset: 2px;
+		}
+	}
+	&[open] summary::after {
+		content: "\2212";
+	}
+	& p {
+		margin: 0 0 var(--space-3);
+		max-width: 62ch;
+	}
+}
+
+/* --- src/blocks/feature-columns.css --- */
+.feature-columns .lead {
+	margin-top: var(--space-2);
+}
+
+.feature-columns__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+	gap: var(--space-5) var(--space-5);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: step;
+}
+
+/* No boxes: a short rule, the title, the words */
+.feature-columns__item {
+	max-width: none;
+	padding-top: var(--space-3);
+	border-top: 3px solid var(--col-accent);
+
+	& h3 {
+		margin: 0 0 var(--space-2);
+		font-size: var(--fs-h3);
+	}
+	& p {
+		margin: 0;
+	}
+}
+
+/* Steps: a big script numeral above each title */
+.feature-columns__list--numbered .feature-columns__item {
+	counter-increment: step;
+
+	&::before {
+		content: counter(step);
+		display: block;
+		margin-bottom: 0.1em;
+		font-family: var(--font-family-display);
+		font-size: 4rem;
+		line-height: 1;
+		color: var(--col-accent-text);
+	}
+}
+[data-surface="brand"] .feature-columns__list--numbered .feature-columns__item::before {
+	color: var(--col-accent);
+}
+
+.feature-columns__link {
+	font-weight: 600;
+}
+
+/* --- src/blocks/hikes-list.css --- */
+.hikes-list__month {
+	margin-top: var(--space-5);
+
+	& > h3 {
+		margin: 0 0 var(--space-2);
+		padding-bottom: var(--space-2);
+		border-bottom: 2px solid var(--col-brand-line);
+		font-family: var(--font-family-base);
+		font-size: var(--fs-lead);
+		font-weight: var(--fw-700);
+		letter-spacing: 0;
+	}
+}
+
+.hikes-list__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* One hike per row: the date, the details, then price and availability. The
+   title's link is stretched over the whole row. */
+.hikes-list__item {
+	position: relative;
+	display: grid;
+	grid-template-columns: 4.5rem 1fr;
+	gap: var(--space-2) var(--space-4);
+	align-items: start;
+	max-width: none;
+	padding-block: var(--space-4);
+	border-bottom: 1px solid var(--col-brand-line);
+
+	&:has(a:focus-visible) {
+		outline: 3px solid var(--col-accent);
+		outline-offset: -3px;
+	}
+	&:hover .hikes-list__link {
+		color: var(--col-accent-text);
+	}
+	&[data-status="sold-out"] {
+		opacity: 0.7;
+	}
+}
+
+.hikes-list__date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	line-height: 1;
+	text-align: center;
+}
+.hikes-list__dow,
+.hikes-list__mon {
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+.hikes-list__day {
+	margin-block: 0.1em 0.05em;
+	font-family: var(--font-family-display);
+	font-size: 3.25rem;
+	color: var(--col-accent-text);
+}
+
+.hikes-list__body {
+	& h4 {
+		margin: 0 0 0.2em;
+		font-size: var(--fs-lead);
+		line-height: 1.25;
+	}
+	& p {
+		margin: 0;
+	}
+}
+.hikes-list__link {
+	color: inherit;
+	text-decoration: none;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+	}
+	&:hover {
+		text-decoration: none;
+	}
+	&:focus-visible {
+		outline: none;
+	}
+}
+.hikes-list__meta {
+	font-size: var(--fs-small);
+	color: var(--col-brand-mid);
+}
+.hikes-list__desc {
+	margin-top: var(--space-1);
+}
+
+.hikes-list__side {
+	grid-column: 2;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2) var(--space-3);
+}
+.hikes-list__price {
+	font-weight: var(--fw-700);
+}
+.hikes-list__tag {
+	padding: 0.2em 0.8em;
+	border-radius: 999px;
+	background: var(--col-wash);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+}
+.hikes-list__tag--sold {
+	background: var(--col-ink);
+	color: var(--col-white);
+}
+
+.hikes-list__more {
+	margin-top: var(--space-5);
+}
+
+/* Each hike's featured photo, in the brush mask, on wider screens only. */
+.hikes-list__thumb {
+	display: none;
+}
+
+@media (min-width: 700px) {
+	.hikes-list__item {
+		grid-template-columns: 4.5rem 1fr auto;
+		align-items: center;
+	}
+	.hikes-list--images .hikes-list__item {
+		grid-template-columns: 4.5rem 9rem 1fr auto;
+	}
+	.hikes-list--images .hikes-list__thumb {
+		display: block;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+
+		& img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: scale 0.5s ease;
+		}
+	}
+	.hikes-list--images .hikes-list__item:hover .hikes-list__thumb img {
+		scale: 1.06;
+	}
+	.hikes-list--images .hikes-list__side {
+		grid-column: 4;
+	}
+	.hikes-list__side {
+		grid-column: 3;
+		flex-direction: column;
+		align-items: flex-end;
+		min-width: 7rem;
 	}
 }
 
@@ -408,8 +744,8 @@
 		inset: -0.2em -0.4em;
 		z-index: -1;
 		background: var(--col-wash);
-		-webkit-mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		-webkit-mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
 	}
 }
 
@@ -635,6 +971,86 @@ body.theme-fitness .page-hero--image .page-hero__media::after {
 	padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap) + clamp(1.5rem, 5vw, 4.5rem));
 }
 
+/* Hike titles are long: let them run wider than the usual 14ch. */
+body.single-product .page-hero h1 {
+	max-width: 26ch;
+}
+
+/* Breadcrumbs above the title: small, light, wrapping, with a chevron between. */
+.breadcrumbs {
+	margin-bottom: var(--space-3);
+	font-size: 0.875rem;
+
+	& ol {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25em 0.6em;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	& li {
+		max-width: none;
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		margin: 0;
+
+		&:not(:last-child)::after {
+			content: "";
+			width: 0.4em;
+			height: 0.4em;
+			border: solid currentcolor;
+			border-width: 2px 2px 0 0;
+			opacity: 0.6;
+			rotate: 45deg;
+		}
+	}
+	& a {
+		color: inherit;
+		opacity: 0.85;
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			opacity: 1;
+			text-decoration: underline;
+		}
+	}
+}
+
+/* Links between the fitness pages, along the bottom of the hero copy. */
+.page-hero__subnav {
+	margin-top: var(--space-4);
+
+	& ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em 1.5em;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	& li {
+		max-width: none;
+		margin: 0;
+	}
+	& a {
+		display: inline-block;
+		padding-block: 0.2em;
+		border-bottom: 2px solid transparent;
+		color: inherit;
+		font-weight: 600;
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible,
+		&[aria-current="page"] {
+			border-bottom-color: var(--col-accent);
+		}
+	}
+}
+
 /* --- src/blocks/post.css --- */
 .post__body {
 	max-width: 46rem;
@@ -827,6 +1243,59 @@ body.theme-fitness .page-hero--image .page-hero__media::after {
 	.pullquote-slider__track {
 		scroll-behavior: auto;
 	}
+}
+
+/* With a background photo: dark scrim, taller, the photo drifts (motion.js).
+   With a brush edge at the top the photo itself reaches up into the edge zone and
+   is masked by the brush shape, the same way as the call to action band. */
+.pullquote--image {
+	position: relative;
+	padding-block: calc(var(--section-pad) * 1.3);
+}
+.pullquote__media {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	background: #1f2827;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: rgb(31 40 39 / 0.72);
+	}
+}
+body.theme-fitness .pullquote__media::after {
+	background: rgb(6 32 59 / 0.75);
+}
+.pullquote__media-inner {
+	position: absolute;
+	inset: 0;
+
+	& img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+.pullquote--image .pullquote__inner {
+	position: relative;
+	z-index: 1;
+}
+.pullquote--image.brush-top::before {
+	display: none;
+}
+.pullquote--image.brush-top .pullquote__media {
+	top: calc(1px - var(--edge-height));
+	transform: scaleY(-1);
+	-webkit-mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% var(--edge-height) no-repeat, linear-gradient(#000, #000) center top / 100% calc(100% - var(--edge-height) + 1px) no-repeat;
+	mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% var(--edge-height) no-repeat, linear-gradient(#000, #000) center top / 100% calc(100% - var(--edge-height) + 1px) no-repeat;
+}
+.pullquote--image.brush-top .pullquote__media-inner {
+	transform: scaleY(-1);
+}
+[data-surface="brand"] .pullquote__figure figcaption {
+	color: inherit;
 }
 
 /* --- src/blocks/social-band.css --- */
@@ -1113,6 +1582,18 @@ body.theme-fitness .page-hero--image .page-hero__media::after {
 
 	& img {
 		height: auto;
+	}
+}
+
+/* Phones: two tiles across rather than four tall ones stacked. */
+@media (max-width: 599px) {
+	.tile-links__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-3);
+	}
+	.tile-links__title {
+		inset: auto var(--space-2) var(--space-2);
+		font-size: 1.15rem;
 	}
 }
 

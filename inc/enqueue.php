@@ -59,14 +59,33 @@ function lc_bot2026_enqueue_vendor( $handle, $file, $is_css = false ) {
  */
 function lc_bot2026_enqueue_scripts() {
 
-	// lc_bot2026_enqueue_vendor( 'gsap', 'gsap.min.js' );
-	// lc_bot2026_enqueue_vendor( 'lenis-style', 'lenis.css', true );
-	// lc_bot2026_enqueue_vendor( 'lenis', 'lenis.min.js' );
+	// Smooth scrolling (Lenis) and animation (GSAP + ScrollTrigger), vendored in
+	// js/vendor/. gsap.min.js 3.15.0 gsap.com, ScrollTrigger.min.js 3.15.0,
+	// lenis.min.js 1.3.27 (MIT, github.com/darkroomengineering/lenis). Copied from
+	// the cb-peoplesafe2027 theme. They load in the footer, before theme.min.js.
+	lc_bot2026_enqueue_vendor( 'lenis', 'lenis.min.js' );
+	lc_bot2026_enqueue_vendor( 'gsap', 'gsap.min.js' );
+	lc_bot2026_enqueue_vendor( 'gsap-scrolltrigger', 'ScrollTrigger.min.js' );
 
 	$rel = '/js/theme.min.js';
 	$abs = get_stylesheet_directory() . $rel;
 	if ( file_exists( $abs ) ) {
-		wp_enqueue_script( 'lc-skeleton-theme', get_stylesheet_directory_uri() . $rel, array(), filemtime( $abs ), true );
+		wp_enqueue_script( 'lc-skeleton-theme', get_stylesheet_directory_uri() . $rel, array( 'lenis', 'gsap', 'gsap-scrolltrigger' ), filemtime( $abs ), true );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'lc_bot2026_enqueue_scripts' );
+
+/**
+ * Switch the page into "motion" mode before it paints, so entrance animations
+ * start from hidden with no flash. Skipped for visitors who ask for reduced
+ * motion. If the theme script has not marked the page ready after a few
+ * seconds (blocked or broken), everything is shown anyway.
+ *
+ * @return void
+ */
+function lc_bot2026_motion_class() {
+	?>
+<script>(function(){var d=document.documentElement;if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){return;}d.classList.add('js-motion');setTimeout(function(){if(!d.classList.contains('js-motion-ready')){d.classList.remove('js-motion');}},4000);})();</script>
+	<?php
+}
+add_action( 'wp_head', 'lc_bot2026_motion_class', 0 );

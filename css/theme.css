@@ -334,7 +334,7 @@ a {
 		inset: -0.25em -0.5em;
 		z-index: -1;
 		background: var(--col-wash);
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=3") center / 100% 100% no-repeat;
 	}
 
 /* Section surfaces shared by every block via data-surface */
@@ -363,6 +363,9 @@ a {
 
 [data-surface="brand"] .pill { color: var(--col-brand); }
 .section { display: flow-root; padding-block: var(--section-pad); } /* flow-root: a last paragraph's margin can't escape and leave a strip when padding is trimmed */
+/* A link to a section by its id (such as #enquire) lands below the sticky header */
+.section[id] { scroll-margin-top: calc(var(--nav-height) + var(--space-4)); }
+
 /* Brush edges. A stroke paints up over the bottom of the block it sits on, so that
    block needs extra bottom padding or its content ends up under the brush. Both
    cases are found automatically: a block followed by a brush-top block, and a
@@ -377,6 +380,91 @@ a {
 .section.space-top-none { padding-top: 0; }
 .section.space-bottom-small { padding-bottom: calc(var(--section-pad) * 0.4); }
 .section.space-bottom-none { padding-bottom: 0; }
+
+/* Fern watermark: the frond from the logo, a faint background mark growing in from
+   one side of a section. The footer has it (from the right); any block can take it
+   through Additional CSS class: fern-left or fern-right (fern-both puts one on each side, for tall sections). It is a background, so it
+   never clashes with the brush edges. --fern-y (set by motion.js) lets it drift up
+   and down as the page scrolls. */
+.fern-left,
+.fern-right {
+	background-repeat: no-repeat;
+	background-size: clamp(18rem, 50vw, 44rem) auto; /* sized by width: shrinks on phones, stops growing on wide screens */
+}
+#footer {
+	background-repeat: no-repeat;
+	background-size: clamp(18rem, 50vw, 44rem) auto;
+}
+.fern-left {
+	background-image: url("../img/fern-left-dark.svg?v=4");
+	background-position: left -4rem top calc(22% + var(--fern-y, 0) * 0.25rem);
+}
+.fern-right,
+#footer {
+	background-image: url("../img/fern-right-dark.svg?v=4");
+	background-position: right -4rem top calc(22% + var(--fern-y, 0) * 0.25rem);
+}
+.fern-left[data-surface="brand"] {
+	background-image: url("../img/fern-left-light.svg?v=2");
+}
+.fern-right[data-surface="brand"] {
+	background-image: url("../img/fern-right-light.svg?v=2");
+}
+#footer {
+	background-image: url("../img/fern-right-footer.svg?v=1");
+}
+
+/* Grain: a fine paper-like noise over a section's colour. Add the class grain
+   through Additional CSS class. Dark speckle on light sections, light speckle on
+   dark ones, and it combines with fern-left and fern-right. */
+.grain {
+	background-image: url("../img/grain-dark.svg?v=2");
+	background-size: 240px;
+}
+.grain[data-surface="brand"] {
+	background-image: url("../img/grain-light.svg?v=2");
+}
+.grain:is(.fern-left, .fern-right) {
+	background-size: clamp(18rem, 50vw, 44rem) auto, 240px;
+	background-repeat: no-repeat, repeat;
+}
+.grain.fern-left {
+	background-image: url("../img/fern-left-dark.svg?v=4"), url("../img/grain-dark.svg?v=2");
+	background-position: left -4rem top calc(22% + var(--fern-y, 0) * 0.25rem), 0 0;
+}
+.grain.fern-right {
+	background-image: url("../img/fern-right-dark.svg?v=4"), url("../img/grain-dark.svg?v=2");
+	background-position: right -4rem top calc(22% + var(--fern-y, 0) * 0.25rem), 0 0;
+}
+.grain.fern-left[data-surface="brand"] {
+	background-image: url("../img/fern-left-light.svg?v=2"), url("../img/grain-light.svg?v=2");
+}
+.grain.fern-right[data-surface="brand"] {
+	background-image: url("../img/fern-right-light.svg?v=2"), url("../img/grain-light.svg?v=2");
+}
+
+/* Both sides: one fern from the left near the top, one from the right near the bottom. */
+.fern-both {
+	background-image: url("../img/fern-left-dark.svg?v=4"), url("../img/fern-right-dark.svg?v=4");
+	background-repeat: no-repeat;
+	background-size: clamp(18rem, 50vw, 44rem) auto, clamp(18rem, 50vw, 44rem) auto;
+	background-position: left -4rem top calc(5rem + var(--fern-y, 0) * 0.25rem), right -4rem bottom calc(var(--edge-height) + var(--edge-overlap) + 2rem - var(--fern-y, 0) * 0.25rem);
+}
+.fern-both[data-surface="brand"] {
+	background-image: url("../img/fern-left-light.svg?v=2"), url("../img/fern-right-light.svg?v=2");
+}
+
+/* The brush edges are separate layers painted in the flat surface colour, so they
+   need the grain too, or the edge looks smoother than the panel it belongs to. */
+.grain.brush-top::before,
+.grain.brush-edge::after {
+	background-image: url("../img/grain-dark.svg?v=2");
+	background-size: 240px;
+}
+.grain[data-surface="brand"].brush-top::before,
+.grain[data-surface="brand"].brush-edge::after {
+	background-image: url("../img/grain-light.svg?v=2");
+}
 /*
  * Structural grid container rules. The actual `.col-*` / `.col-md-*` span
  * classes are generated (see src/build/generate-utilities.js) since they're
@@ -495,6 +583,26 @@ a {
 	top: calc(-1 * var(--nav-height) - 1rem);
 	visibility: hidden;
 }
+
+
+/* No sideways scrolling on a phone. Decorative things (parallax photos, the faint
+   brush behind the contact form) can reach past the edge; clip them at the page
+   rather than let them widen it. Clip, not hidden, so sticky and brush edges
+   that overhang vertically still work. */
+main,
+#footer {
+	overflow-x: clip;
+}
+
+/* Long links and wide tables (the legal pages) must not push the page wider. */
+main a {
+	overflow-wrap: anywhere;
+}
+main table:not(.shop_table):not(.woocommerce-table) {
+	display: block;
+	max-width: 100%;
+	overflow-x: auto;
+}
 /*
  * Nav breakpoint: 992px, matching the "lg" breakpoint in
  * src/build/tokens.config.js. CSS custom properties can't be read inside an
@@ -504,6 +612,7 @@ a {
 
 .navbar {
 	position: relative;
+	z-index: 1; /* above the masthead's brush edge, which would cut off the bottom of the burger */
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -694,13 +803,62 @@ a {
 	}
 }
 
+/* Basket: only in the markup when there is something in it */
+.navbar-basket-wrap {
+	margin-left: auto;
+	margin-right: var(--space-2);
+}
+.navbar-basket {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: 50%;
+	color: var(--col-accent);
+	text-decoration: none;
+}
+.navbar-basket:hover {
+		background: var(--col-brand-mid);
+	}
+.navbar-basket:focus-visible {
+		outline: 3px solid var(--col-accent);
+		outline-offset: 2px;
+	}
+.navbar-basket__count {
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: grid;
+	place-items: center;
+	min-width: 1.25rem;
+	height: 1.25rem;
+	padding-inline: 0.25rem;
+	border-radius: 999px;
+	background: var(--col-accent);
+	color: var(--col-ink);
+	font-size: 0.75rem;
+	font-weight: var(--fw-700);
+	line-height: 1;
+}
+@media (min-width: 992px) {
+	/* menu first, then the basket at the far right */
+	.navbar-collapse {
+		margin-left: auto;
+		order: 2;
+	}
+	.navbar-basket-wrap {
+		order: 3;
+		margin-left: var(--space-3);
+		margin-right: 0;
+	}
+}
 #footer {
 	position: relative;
 	padding-top: var(--section-pad);
 
 	/* Brush edge painted over whatever sits above the footer */
 }
-
 #footer::before {
 		content: "";
 		position: absolute;
@@ -711,12 +869,10 @@ a {
 		mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% 100% no-repeat;
 		pointer-events: none;
 	}
-
 #footer a {
 		color: var(--col-white);
 		text-decoration: none;
 	}
-
 :is(#footer a):hover {
 			color: var(--col-accent);
 			text-decoration: underline;
@@ -728,6 +884,17 @@ a {
 	grid-template-columns: 1fr;
 }
 
+/* Phones: the brand across the top, then Contact and Site side by side. */
+@media (max-width: 799px) {
+	.footer__grid {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-4) var(--space-3);
+	}
+	.footer__brand {
+		grid-column: 1 / -1;
+	}
+}
+
 @media (min-width: 800px) {
 	.footer__grid {
 		grid-template-columns: 2fr 1fr 1fr;
@@ -735,7 +902,10 @@ a {
 }
 
 .footer__logo {
+	width: 8.5rem;
+	aspect-ratio: 1;
 	margin-bottom: var(--space-3);
+	mask: url("../img/bot-roundel.png") center / contain no-repeat;
 }
 
 .footer__heading {
@@ -877,6 +1047,291 @@ select {
 	color: inherit;
 }
 
+/* Checkboxes and radios big enough to tap. */
+input[type="checkbox"],
+input[type="radio"] {
+	width: 1.4rem;
+	height: 1.4rem;
+	flex: none;
+	accent-color: var(--col-brand-mid);
+}
+/* Smooth scroll (Lenis). Lenis sets these classes on <html>; scroll-behavior
+   must not be "smooth" or the two fight. */
+html.lenis,
+html.lenis body {
+	height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+	overflow: clip;
+}
+.lenis.lenis-smooth {
+	scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+	overscroll-behavior: contain;
+}
+
+/* Pill strokes paint on left to right: motion.js animates --paint from 0 to 1.
+   The leading edge is feathered (a gradient mask intersected with the brush shape)
+   rather than a hard wipe. Without JS or with reduced motion --paint falls back
+   to 1: fully painted. */
+.pill::before {
+	--paint-mask: linear-gradient(90deg, #000 calc(var(--paint, 1) * 140% - 40%), transparent calc(var(--paint, 1) * 140%));
+	mask-composite: intersect;
+	mask-image: url("../img/brush/brush-pill.svg?v=2"), var(--paint-mask);
+	mask-size: 100% 100%, 100% 100%;
+	mask-position: center, 0 0;
+	mask-repeat: no-repeat;
+}
+
+/* Hero copy is hidden from first paint until motion.js has taken over, so it
+   never flashes before it rises in. */
+.js-motion:not(.js-motion-ready) .page-hero__inner > * {
+	opacity: 0;
+}
+
+/* Entrance: only while <html> has .js-motion (set in <head> before paint, removed
+   for reduced motion or if the script never runs). */
+.js-motion :is(
+	.text-image__copy,
+	.text-image__media,
+	.text-section__body,
+	.tile-links__tile,
+	.latest-news__card,
+	.collaborators__item,
+	.feature-columns__item,
+	.hikes-list__item,
+	.faq__item,
+	.pullquote__figure,
+	.contact__copy,
+	.contact__form,
+	.cta-band__inner,
+	.social-band__inner,
+	.newsletter-band__inner
+):not(.is-in) {
+	opacity: 0;
+	translate: 0 2.25rem;
+}
+.js-motion :is(
+	.text-image__copy,
+	.text-image__media,
+	.text-section__body,
+	.tile-links__tile,
+	.latest-news__card,
+	.collaborators__item,
+	.feature-columns__item,
+	.hikes-list__item,
+	.faq__item,
+	.pullquote__figure,
+	.contact__copy,
+	.contact__form,
+	.cta-band__inner,
+	.social-band__inner,
+	.newsletter-band__inner
+) {
+	transition:
+		opacity 0.8s ease calc(var(--i, 0) * 90ms),
+		translate 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i, 0) * 90ms);
+}
+/*
+ * WooCommerce pieces the theme styles itself: the booking box on a hike's page.
+ * (WooCommerce's own stylesheet still handles the cart and checkout for now.)
+ */
+
+.hike__grid {
+	display: grid;
+	gap: var(--space-5);
+	align-items: start;
+}
+@media (min-width: 900px) {
+	.hike__grid {
+		grid-template-columns: 1fr 22rem;
+		gap: var(--space-6);
+	}
+	.hike__book {
+		position: sticky;
+		/* clear the header, including the brush edge that hangs below it */
+		top: calc(var(--nav-height) + var(--space-6));
+	}
+}
+
+/* On a phone the booking box comes first, so the price and Add to basket are
+   not below a screen and a half of description. */
+@media (max-width: 899px) {
+	.hike__book {
+		order: -1;
+	}
+}
+
+.hike__main > * + * {
+	margin-top: var(--space-3);
+}
+
+.hike__facts {
+	margin: 0 0 var(--space-3);
+}
+
+.hike__facts > div {
+		display: grid;
+		grid-template-columns: 5.5rem 1fr;
+		gap: var(--space-2);
+		padding-block: 0.6em;
+		border-top: 1px solid var(--col-brand-line);
+	}
+
+.hike__facts > div:last-child {
+		border-bottom: 1px solid var(--col-brand-line);
+	}
+
+.hike__facts dt {
+		font-weight: var(--fw-700);
+	}
+
+.hike__facts dd {
+		margin: 0;
+	}
+
+.hike__price {
+	margin: var(--space-3) 0 var(--space-2);
+	font-family: var(--font-family-display);
+	font-size: var(--fs-h3);
+	line-height: 1;
+	color: var(--col-accent-text);
+}
+.hike__stock {
+	margin: 0 0 var(--space-2);
+	font-weight: var(--fw-700);
+}
+.hike__stock--sold {
+	color: #b00020;
+}
+
+/* WooCommerce's add to cart form, in the theme's own look */
+.hike__book form.cart {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2);
+	margin: 0;
+}
+:is(.hike__book form.cart) .quantity input.qty {
+		width: 4.5rem;
+		padding: 0.75em 0.5em;
+		border: 2px solid var(--col-brand-mid);
+		border-radius: 999px;
+		text-align: center;
+	}
+:is(.hike__book form.cart) .single_add_to_cart_button {
+		flex: 1;
+		padding: 0.8em 1.6em;
+		border: 2px solid var(--col-accent);
+		border-radius: 999px;
+		background: var(--col-accent);
+		color: var(--col-ink);
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: var(--fw-700);
+		line-height: 1.2;
+		cursor: pointer;
+	}
+:is(:is(.hike__book form.cart) .single_add_to_cart_button):hover {
+			background: var(--col-ink);
+			border-color: var(--col-ink);
+			color: var(--col-white);
+		}
+:is(:is(.hike__book form.cart) .single_add_to_cart_button):disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+.woocommerce-notices-wrapper:empty {
+	display: none;
+}
+
+/* The booking pages: basket, attendee details, checkout, account */
+.woo-page h1 {
+		font-size: var(--fs-h2);
+	}
+/* :not(#woo) adds id-level weight so these beat WooCommerce's own button rules */
+.woo-page :is(.button,.wp-element-button,button[type="submit"],input[type="submit"]):not(#woo) {
+		padding: 0.8em 1.6em;
+		border: 2px solid var(--col-accent);
+		border-radius: 999px;
+		background: var(--col-accent);
+		color: var(--col-ink);
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: var(--fw-700);
+		line-height: 1.2;
+		text-decoration: none;
+		cursor: pointer;
+	}
+:is(.woo-page :is(.button,.wp-element-button,button[type="submit"],input[type="submit"]):not(#woo)):hover {
+			background: var(--col-ink);
+			border-color: var(--col-ink);
+			color: var(--col-white);
+		}
+.woo-page label {
+		font-weight: var(--fw-700);
+	}
+.woo-page .required {
+		color: #b00020;
+	}
+
+.hike__calendar {
+	margin-top: var(--space-4);
+	padding-top: var(--space-3);
+	border-top: 1px solid var(--col-line, rgb(0 0 0 / 0.12));
+	font-size: var(--fs-sm, 0.9rem);
+}
+
+.hike__calendar ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.3em;
+	}
+.hike__calendar-title {
+	margin: 0 0 0.4em;
+	font-weight: 700;
+}
+.hike__map {
+	margin-top: var(--space-5, 3rem);
+}
+.hike__map iframe {
+		display: block;
+		width: 100%;
+		height: clamp(18rem, 40vw, 28rem);
+		border: 0;
+	}
+
+/* Order received: the number, date, total and payment method as plain rows,
+   not a strip of dotted-border cells that wraps unevenly on a phone. The selector
+   is long on purpose: WooCommerce's own stylesheet floats these cells. */
+.woocommerce ul.woocommerce-order-overview,
+.woocommerce-page ul.woocommerce-order-overview {
+	display: grid;
+	gap: 0;
+	margin: var(--space-3) 0;
+	padding: 0;
+	list-style: none;
+}
+.woocommerce ul.woocommerce-order-overview li,
+.woocommerce-page ul.woocommerce-order-overview li {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 0 var(--space-3);
+	float: none;
+	max-width: none;
+	margin: 0;
+	padding: var(--space-2) 0;
+	border: 0;
+	border-bottom: 1px solid var(--col-brand-line);
+}
+:is(.woocommerce ul.woocommerce-order-overview li,.woocommerce-page ul.woocommerce-order-overview li) strong {
+		text-align: right;
+	}
 /* Generated by src/build/generate-utilities.js — do not hand-edit. */
 
 .d-block { display: block; }
@@ -1974,7 +2429,7 @@ select {
 		z-index: -2;
 		background: var(--col-wash);
 		rotate: -7deg;
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
 	}
 .collaborators__disc::after {
 		content: "";
@@ -2115,7 +2570,7 @@ select {
 		display: block;
 		margin-top: 0.35rem;
 	}
-.contact__form input[type="text"],.contact__form input[type="email"],.contact__form input[type="tel"],.contact__form textarea {
+.contact__form input[type="text"],.contact__form input[type="email"],.contact__form input[type="tel"],.contact__form input[type="number"],.contact__form select,.contact__form textarea {
 		width: 100%;
 		padding: 0.75em 1em;
 		border: 2px solid var(--col-brand-mid);
@@ -2124,7 +2579,7 @@ select {
 		color: var(--col-ink);
 		font-weight: var(--fw-400);
 	}
-:is(.contact__form input[type="text"],.contact__form input[type="email"],.contact__form input[type="tel"],.contact__form textarea):focus-visible {
+:is(.contact__form input[type="text"],.contact__form input[type="email"],.contact__form input[type="tel"],.contact__form input[type="number"],.contact__form select,.contact__form textarea):focus-visible {
 			border-color: var(--col-brand);
 			outline: 3px solid var(--col-accent);
 			outline-offset: 1px;
@@ -2189,6 +2644,338 @@ select {
 @media (min-width: 800px) {
 	.cta-band__inner {
 		grid-template-columns: 1fr auto;
+	}
+}
+
+/* With a background photo: dark scrim, taller, the photo drifts (motion.js). */
+.cta-band--image {
+	position: relative;
+	padding-block: calc(var(--section-pad) * 1.3);
+}
+.cta-band__media {
+	position: absolute;
+	inset: 0;
+	overflow: hidden; /* clips the drifting photo, not the section, so the brush edge can overhang */
+}
+.cta-band__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+.cta-band__media::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(90deg, rgb(31 40 39 / 0.82) 0, rgb(31 40 39 / 0.5) 65%, rgb(31 40 39 / 0.3) 100%);
+	}
+.cta-band--image .cta-band__inner {
+	position: relative;
+	z-index: 1;
+}
+body.theme-fitness .cta-band__media::after {
+	background: linear-gradient(90deg, rgb(6 32 59 / 0.85) 0, rgb(6 32 59 / 0.5) 65%, rgb(6 32 59 / 0.3) 100%);
+}
+/* With a brush edge at the top, the photo itself reaches up into the edge zone
+   and is masked by the brush shape (no separate coloured edge). The mask lives on
+   a flipped box, like the other brush edges, and the content is flipped back. */
+.cta-band--image.brush-top::before {
+	display: none;
+}
+.cta-band--image.brush-top .cta-band__media {
+	top: calc(1px - var(--edge-height));
+	transform: scaleY(-1);
+	mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% var(--edge-height) no-repeat, linear-gradient(#000, #000) center top / 100% calc(100% - var(--edge-height) + 1px) no-repeat;
+}
+.cta-band__media-inner {
+	position: absolute;
+	inset: 0;
+}
+.cta-band--image.brush-top .cta-band__media-inner {
+	transform: scaleY(-1);
+}
+.cta-band__media-inner img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* --- src/blocks/faq.css --- */
+.faq__inner {
+	display: grid;
+	gap: var(--space-4);
+}
+
+/* the list is the narrow part, so the heading stays on the page's left edge */
+.faq__list {
+	max-width: 56rem;
+	border-top: 2px solid var(--col-brand-line);
+}
+
+.faq__item {
+	border-bottom: 2px solid var(--col-brand-line);
+}
+
+.faq__item summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		padding-block: var(--space-3);
+		font-size: var(--fs-lead);
+		font-weight: var(--fw-700);
+		line-height: 1.3;
+		cursor: pointer;
+		list-style: none;
+	}
+
+:is(.faq__item summary)::-webkit-details-marker {
+			display: none;
+		}
+
+/* plus that turns into a minus when open */
+
+:is(.faq__item summary)::after {
+			content: "+";
+			flex: none;
+			display: grid;
+			place-items: center;
+			width: 2rem;
+			height: 2rem;
+			border-radius: 50%;
+			background: var(--col-wash);
+			font-size: 1.5rem;
+			line-height: 1;
+			transition: rotate 200ms ease;
+		}
+
+:is(.faq__item summary):hover {
+			color: var(--col-accent-text);
+		}
+
+:is(.faq__item summary):focus-visible {
+			outline: 3px solid var(--col-accent);
+			outline-offset: 2px;
+		}
+
+.faq__item[open] summary::after {
+		content: "\2212";
+	}
+
+.faq__item p {
+		margin: 0 0 var(--space-3);
+		max-width: 62ch;
+	}
+
+/* --- src/blocks/feature-columns.css --- */
+.feature-columns .lead {
+	margin-top: var(--space-2);
+}
+
+.feature-columns__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+	gap: var(--space-5) var(--space-5);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: step;
+}
+
+/* No boxes: a short rule, the title, the words */
+.feature-columns__item {
+	max-width: none;
+	padding-top: var(--space-3);
+	border-top: 3px solid var(--col-accent);
+}
+.feature-columns__item h3 {
+		margin: 0 0 var(--space-2);
+		font-size: var(--fs-h3);
+	}
+.feature-columns__item p {
+		margin: 0;
+	}
+
+/* Steps: a big script numeral above each title */
+.feature-columns__list--numbered .feature-columns__item {
+	counter-increment: step;
+}
+:is(.feature-columns__list--numbered .feature-columns__item)::before {
+		content: counter(step);
+		display: block;
+		margin-bottom: 0.1em;
+		font-family: var(--font-family-display);
+		font-size: 4rem;
+		line-height: 1;
+		color: var(--col-accent-text);
+	}
+[data-surface="brand"] .feature-columns__list--numbered .feature-columns__item::before {
+	color: var(--col-accent);
+}
+
+.feature-columns__link {
+	font-weight: 600;
+}
+
+/* --- src/blocks/hikes-list.css --- */
+.hikes-list__month {
+	margin-top: var(--space-5);
+}
+.hikes-list__month > h3 {
+		margin: 0 0 var(--space-2);
+		padding-bottom: var(--space-2);
+		border-bottom: 2px solid var(--col-brand-line);
+		font-family: var(--font-family-base);
+		font-size: var(--fs-lead);
+		font-weight: var(--fw-700);
+		letter-spacing: 0;
+	}
+
+.hikes-list__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* One hike per row: the date, the details, then price and availability. The
+   title's link is stretched over the whole row. */
+.hikes-list__item {
+	position: relative;
+	display: grid;
+	grid-template-columns: 4.5rem 1fr;
+	gap: var(--space-2) var(--space-4);
+	align-items: start;
+	max-width: none;
+	padding-block: var(--space-4);
+	border-bottom: 1px solid var(--col-brand-line);
+}
+.hikes-list__item:has(a:focus-visible) {
+		outline: 3px solid var(--col-accent);
+		outline-offset: -3px;
+	}
+.hikes-list__item:hover .hikes-list__link {
+		color: var(--col-accent-text);
+	}
+.hikes-list__item[data-status="sold-out"] {
+		opacity: 0.7;
+	}
+
+.hikes-list__date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	line-height: 1;
+	text-align: center;
+}
+.hikes-list__dow,
+.hikes-list__mon {
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+.hikes-list__day {
+	margin-block: 0.1em 0.05em;
+	font-family: var(--font-family-display);
+	font-size: 3.25rem;
+	color: var(--col-accent-text);
+}
+
+.hikes-list__body h4 {
+		margin: 0 0 0.2em;
+		font-size: var(--fs-lead);
+		line-height: 1.25;
+	}
+
+.hikes-list__body p {
+		margin: 0;
+	}
+.hikes-list__link {
+	color: inherit;
+	text-decoration: none;
+}
+.hikes-list__link::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+	}
+.hikes-list__link:hover {
+		text-decoration: none;
+	}
+.hikes-list__link:focus-visible {
+		outline: none;
+	}
+.hikes-list__meta {
+	font-size: var(--fs-small);
+	color: var(--col-brand-mid);
+}
+.hikes-list__desc {
+	margin-top: var(--space-1);
+}
+
+.hikes-list__side {
+	grid-column: 2;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2) var(--space-3);
+}
+.hikes-list__price {
+	font-weight: var(--fw-700);
+}
+.hikes-list__tag {
+	padding: 0.2em 0.8em;
+	border-radius: 999px;
+	background: var(--col-wash);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+}
+.hikes-list__tag--sold {
+	background: var(--col-ink);
+	color: var(--col-white);
+}
+
+.hikes-list__more {
+	margin-top: var(--space-5);
+}
+
+/* Each hike's featured photo, in the brush mask, on wider screens only. */
+.hikes-list__thumb {
+	display: none;
+}
+
+@media (min-width: 700px) {
+	.hikes-list__item {
+		grid-template-columns: 4.5rem 1fr auto;
+		align-items: center;
+	}
+	.hikes-list--images .hikes-list__item {
+		grid-template-columns: 4.5rem 9rem 1fr auto;
+	}
+	.hikes-list--images .hikes-list__thumb {
+		display: block;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+	}
+
+		:is(.hikes-list--images .hikes-list__thumb) img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: scale 0.5s ease;
+		}
+	.hikes-list--images .hikes-list__item:hover .hikes-list__thumb img {
+		scale: 1.06;
+	}
+	.hikes-list--images .hikes-list__side {
+		grid-column: 4;
+	}
+	.hikes-list__side {
+		grid-column: 3;
+		flex-direction: column;
+		align-items: flex-end;
+		min-width: 7rem;
 	}
 }
 
@@ -2316,7 +3103,7 @@ select {
 		inset: -0.2em -0.4em;
 		z-index: -1;
 		background: var(--col-wash);
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
 	}
 
 .latest-news__body {
@@ -2538,6 +3325,78 @@ body.theme-fitness .page-hero--image .page-hero__media::after {
 	padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap) + clamp(1.5rem, 5vw, 4.5rem));
 }
 
+/* Hike titles are long: let them run wider than the usual 14ch. */
+body.single-product .page-hero h1 {
+	max-width: 26ch;
+}
+
+/* Breadcrumbs above the title: small, light, wrapping, with a chevron between. */
+.breadcrumbs {
+	margin-bottom: var(--space-3);
+	font-size: 0.875rem;
+}
+.breadcrumbs ol {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25em 0.6em;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+.breadcrumbs li {
+		max-width: none;
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		margin: 0;
+	}
+:is(.breadcrumbs li):not(:last-child)::after {
+			content: "";
+			width: 0.4em;
+			height: 0.4em;
+			border: solid currentcolor;
+			border-width: 2px 2px 0 0;
+			opacity: 0.6;
+			rotate: 45deg;
+		}
+.breadcrumbs a {
+		color: inherit;
+		opacity: 0.85;
+		text-decoration: none;
+	}
+:is(.breadcrumbs a):hover,:is(.breadcrumbs a):focus-visible {
+			opacity: 1;
+			text-decoration: underline;
+		}
+
+/* Links between the fitness pages, along the bottom of the hero copy. */
+.page-hero__subnav {
+	margin-top: var(--space-4);
+}
+.page-hero__subnav ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em 1.5em;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+.page-hero__subnav li {
+		max-width: none;
+		margin: 0;
+	}
+.page-hero__subnav a {
+		display: inline-block;
+		padding-block: 0.2em;
+		border-bottom: 2px solid transparent;
+		color: inherit;
+		font-weight: 600;
+		text-decoration: none;
+	}
+:is(.page-hero__subnav a):hover,:is(.page-hero__subnav a):focus-visible,[aria-current="page"]:is(.page-hero__subnav a) {
+			border-bottom-color: var(--col-accent);
+		}
+
 /* --- src/blocks/post.css --- */
 .post__body {
 	max-width: 46rem;
@@ -2718,6 +3577,56 @@ body.theme-fitness .page-hero--image .page-hero__media::after {
 	.pullquote-slider__track {
 		scroll-behavior: auto;
 	}
+}
+
+/* With a background photo: dark scrim, taller, the photo drifts (motion.js).
+   With a brush edge at the top the photo itself reaches up into the edge zone and
+   is masked by the brush shape, the same way as the call to action band. */
+.pullquote--image {
+	position: relative;
+	padding-block: calc(var(--section-pad) * 1.3);
+}
+.pullquote__media {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	background: #1f2827;
+}
+.pullquote__media::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: rgb(31 40 39 / 0.72);
+	}
+body.theme-fitness .pullquote__media::after {
+	background: rgb(6 32 59 / 0.75);
+}
+.pullquote__media-inner {
+	position: absolute;
+	inset: 0;
+}
+.pullquote__media-inner img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+.pullquote--image .pullquote__inner {
+	position: relative;
+	z-index: 1;
+}
+.pullquote--image.brush-top::before {
+	display: none;
+}
+.pullquote--image.brush-top .pullquote__media {
+	top: calc(1px - var(--edge-height));
+	transform: scaleY(-1);
+	mask: url("../img/brush/brush-edge.svg?v=8") center bottom / 100% var(--edge-height) no-repeat, linear-gradient(#000, #000) center top / 100% calc(100% - var(--edge-height) + 1px) no-repeat;
+}
+.pullquote--image.brush-top .pullquote__media-inner {
+	transform: scaleY(-1);
+}
+[data-surface="brand"] .pullquote__figure figcaption {
+	color: inherit;
 }
 
 /* --- src/blocks/social-band.css --- */
@@ -2990,6 +3899,18 @@ body.theme-fitness .page-hero--image .page-hero__media::after {
 :is(.tile-links__grid[data-ratio="original"] .tile-links__frame) img {
 		height: auto;
 	}
+
+/* Phones: two tiles across rather than four tall ones stacked. */
+@media (max-width: 599px) {
+	.tile-links__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-3);
+	}
+	.tile-links__title {
+		inset: auto var(--space-2) var(--space-2);
+		font-size: 1.15rem;
+	}
+}
 /* generated — concatenation of src/blocks/*.css, see src/build/generate-utilities.js */
 
 /*# sourceMappingURL=theme.css.map */

@@ -15,7 +15,14 @@ export function initDialogs() {
 		const dialog = document.getElementById(trigger.getAttribute('data-dialog-target'));
 		if (!(dialog instanceof HTMLDialogElement)) return;
 
-		trigger.addEventListener('click', () => dialog.showModal());
+		trigger.addEventListener('click', () => {
+			dialog.showModal();
+			// Lenis would keep scrolling the page behind the dialog.
+			if (window.lcLenis) window.lcLenis.stop();
+		});
+		dialog.addEventListener('close', () => {
+			if (window.lcLenis) window.lcLenis.start();
+		});
 
 		dialog.querySelectorAll('[data-dialog-close]').forEach((closeBtn) => {
 			closeBtn.addEventListener('click', () => dialog.close());

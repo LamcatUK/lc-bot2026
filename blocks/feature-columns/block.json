@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/feature-columns",
+	"title": "Feature Columns",
+	"category": "lc-bot2026",
+	"icon": "columns",
+	"description": "A heading and a row of short points, each with a title and a few lines. Switch on numbering for steps in a sequence.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "" },
+		"intro": { "type": "string", "default": "" },
+		"numbered": { "type": "boolean", "default": false },
+		"items": { "type": "array", "default": [] },
+		"surface": { "type": "string", "default": "surface" }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

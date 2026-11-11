@@ -14,7 +14,10 @@
 		"text": { "type": "string", "default": "" },
 		"ctaText": { "type": "string", "default": "" },
 		"ctaUrl": { "type": "string", "default": "" },
-		"surface": { "type": "string", "default": "soft" }
+		"surface": { "type": "string", "default": "soft" },
+		"imageId": { "type": "number", "default": 0 },
+		"imageUrl": { "type": "string", "default": "" },
+		"imageAlt": { "type": "string", "default": "" }
 	},
 	"supports": { "anchor": true, "className": true, "align": false },
 	"editorScript": "file:./build/index.js",

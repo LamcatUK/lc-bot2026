@@ -69,3 +69,15 @@
 		height: auto;
 	}
 }
+
+/* Phones: two tiles across rather than four tall ones stacked. */
+@media (max-width: 599px) {
+	.tile-links__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-3);
+	}
+	.tile-links__title {
+		inset: auto var(--space-2) var(--space-2);
+		font-size: 1.15rem;
+	}
+}

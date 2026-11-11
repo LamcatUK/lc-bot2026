@@ -20,7 +20,11 @@ $quotes = array_values(
 if ( ! $quotes ) {
 	return;
 }
-$surface = lc_bot2026_surface( $attributes['surface'] ?? 'surface' );
+$surface   = lc_bot2026_surface( $attributes['surface'] ?? 'surface' );
+$has_image = ! empty( $attributes['imageId'] ) || ! empty( $attributes['imageUrl'] );
+if ( $has_image ) {
+	$surface = 'brand'; // light text over the photo's dark scrim.
+}
 $total   = count( $quotes );
 $title   = $attributes['title'] ?? '';
 
@@ -45,8 +49,11 @@ $figure = static function ( $q ) {
 	<?php
 };
 ?>
-<section <?php echo get_block_wrapper_attributes( array( 'class' => 'pullquote section' . lc_bot2026_section_extras( $attributes ), 'data-surface' => $surface ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-	<div class="container">
+<section <?php echo get_block_wrapper_attributes( array( 'class' => 'pullquote section' . ( $has_image ? ' pullquote--image' : '' ) . lc_bot2026_section_extras( $attributes ), 'data-surface' => $surface ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<?php if ( $has_image ) { ?>
+		<div class="pullquote__media" aria-hidden="true"><div class="pullquote__media-inner"><?php lc_bot2026_image( $attributes['imageId'] ?? 0, $attributes['imageUrl'] ?? '', '', 'full', 'lazy' ); ?></div></div>
+	<?php } ?>
+	<div class="container pullquote__inner">
 		<?php if ( $title ) { ?>
 			<h2><?php echo esc_html( $title ); ?></h2>
 		<?php } ?>

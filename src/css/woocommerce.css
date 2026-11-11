@@ -1,0 +1,203 @@
+/*
+ * WooCommerce pieces the theme styles itself: the booking box on a hike's page.
+ * (WooCommerce's own stylesheet still handles the cart and checkout for now.)
+ */
+
+.hike__grid {
+	display: grid;
+	gap: var(--space-5);
+	align-items: start;
+}
+@media (min-width: 900px) {
+	.hike__grid {
+		grid-template-columns: 1fr 22rem;
+		gap: var(--space-6);
+	}
+	.hike__book {
+		position: sticky;
+		/* clear the header, including the brush edge that hangs below it */
+		top: calc(var(--nav-height) + var(--space-6));
+	}
+}
+
+/* On a phone the booking box comes first, so the price and Add to basket are
+   not below a screen and a half of description. */
+@media (max-width: 899px) {
+	.hike__book {
+		order: -1;
+	}
+}
+
+.hike__main > * + * {
+	margin-top: var(--space-3);
+}
+
+.hike__facts {
+	margin: 0 0 var(--space-3);
+
+	& > div {
+		display: grid;
+		grid-template-columns: 5.5rem 1fr;
+		gap: var(--space-2);
+		padding-block: 0.6em;
+		border-top: 1px solid var(--col-brand-line);
+	}
+	& > div:last-child {
+		border-bottom: 1px solid var(--col-brand-line);
+	}
+	& dt {
+		font-weight: var(--fw-700);
+	}
+	& dd {
+		margin: 0;
+	}
+}
+
+.hike__price {
+	margin: var(--space-3) 0 var(--space-2);
+	font-family: var(--font-family-display);
+	font-size: var(--fs-h3);
+	line-height: 1;
+	color: var(--col-accent-text);
+}
+.hike__stock {
+	margin: 0 0 var(--space-2);
+	font-weight: var(--fw-700);
+}
+.hike__stock--sold {
+	color: #b00020;
+}
+
+/* WooCommerce's add to cart form, in the theme's own look */
+.hike__book form.cart {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2);
+	margin: 0;
+
+	& .quantity input.qty {
+		width: 4.5rem;
+		padding: 0.75em 0.5em;
+		border: 2px solid var(--col-brand-mid);
+		border-radius: 999px;
+		text-align: center;
+	}
+	& .single_add_to_cart_button {
+		flex: 1;
+		padding: 0.8em 1.6em;
+		border: 2px solid var(--col-accent);
+		border-radius: 999px;
+		background: var(--col-accent);
+		color: var(--col-ink);
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: var(--fw-700);
+		line-height: 1.2;
+		cursor: pointer;
+
+		&:hover {
+			background: var(--col-ink);
+			border-color: var(--col-ink);
+			color: var(--col-white);
+		}
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+}
+.woocommerce-notices-wrapper:empty {
+	display: none;
+}
+
+/* The booking pages: basket, attendee details, checkout, account */
+.woo-page {
+	& h1 {
+		font-size: var(--fs-h2);
+	}
+	/* :not(#woo) adds id-level weight so these beat WooCommerce's own button rules */
+	& :is(.button, .wp-element-button, button[type="submit"], input[type="submit"]):not(#woo) {
+		padding: 0.8em 1.6em;
+		border: 2px solid var(--col-accent);
+		border-radius: 999px;
+		background: var(--col-accent);
+		color: var(--col-ink);
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: var(--fw-700);
+		line-height: 1.2;
+		text-decoration: none;
+		cursor: pointer;
+
+		&:hover {
+			background: var(--col-ink);
+			border-color: var(--col-ink);
+			color: var(--col-white);
+		}
+	}
+	& label {
+		font-weight: var(--fw-700);
+	}
+	& .required {
+		color: #b00020;
+	}
+}
+
+.hike__calendar {
+	margin-top: var(--space-4);
+	padding-top: var(--space-3);
+	border-top: 1px solid var(--col-line, rgb(0 0 0 / 0.12));
+	font-size: var(--fs-sm, 0.9rem);
+
+	& ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.3em;
+	}
+}
+.hike__calendar-title {
+	margin: 0 0 0.4em;
+	font-weight: 700;
+}
+.hike__map {
+	margin-top: var(--space-5, 3rem);
+
+	& iframe {
+		display: block;
+		width: 100%;
+		height: clamp(18rem, 40vw, 28rem);
+		border: 0;
+	}
+}
+
+/* Order received: the number, date, total and payment method as plain rows,
+   not a strip of dotted-border cells that wraps unevenly on a phone. The selector
+   is long on purpose: WooCommerce's own stylesheet floats these cells. */
+.woocommerce ul.woocommerce-order-overview,
+.woocommerce-page ul.woocommerce-order-overview {
+	display: grid;
+	gap: 0;
+	margin: var(--space-3) 0;
+	padding: 0;
+	list-style: none;
+}
+.woocommerce ul.woocommerce-order-overview li,
+.woocommerce-page ul.woocommerce-order-overview li {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 0 var(--space-3);
+	float: none;
+	max-width: none;
+	margin: 0;
+	padding: var(--space-2) 0;
+	border: 0;
+	border-bottom: 1px solid var(--col-brand-line);
+
+	& strong {
+		text-align: right;
+	}
+}

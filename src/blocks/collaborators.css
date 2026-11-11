@@ -48,8 +48,8 @@
 		z-index: -2;
 		background: var(--col-wash);
 		rotate: -7deg;
-		-webkit-mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		-webkit-mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
 	}
 
 	&::after {

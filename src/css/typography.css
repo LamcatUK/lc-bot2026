@@ -94,8 +94,8 @@ a {
 		inset: -0.25em -0.5em;
 		z-index: -1;
 		background: var(--col-wash);
-		-webkit-mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		-webkit-mask: url("../img/brush/brush-pill.svg?v=3") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=3") center / 100% 100% no-repeat;
 	}
 }
 
@@ -127,6 +127,9 @@ a {
 
 [data-surface="brand"] .pill { color: var(--col-brand); }
 .section { display: flow-root; padding-block: var(--section-pad); } /* flow-root: a last paragraph's margin can't escape and leave a strip when padding is trimmed */
+/* A link to a section by its id (such as #enquire) lands below the sticky header */
+.section[id] { scroll-margin-top: calc(var(--nav-height) + var(--space-4)); }
+
 /* Brush edges. A stroke paints up over the bottom of the block it sits on, so that
    block needs extra bottom padding or its content ends up under the brush. Both
    cases are found automatically: a block followed by a brush-top block, and a
@@ -141,3 +144,88 @@ a {
 .section.space-top-none { padding-top: 0; }
 .section.space-bottom-small { padding-bottom: calc(var(--section-pad) * 0.4); }
 .section.space-bottom-none { padding-bottom: 0; }
+
+/* Fern watermark: the frond from the logo, a faint background mark growing in from
+   one side of a section. The footer has it (from the right); any block can take it
+   through Additional CSS class: fern-left or fern-right (fern-both puts one on each side, for tall sections). It is a background, so it
+   never clashes with the brush edges. --fern-y (set by motion.js) lets it drift up
+   and down as the page scrolls. */
+.fern-left,
+.fern-right {
+	background-repeat: no-repeat;
+	background-size: clamp(18rem, 50vw, 44rem) auto; /* sized by width: shrinks on phones, stops growing on wide screens */
+}
+#footer {
+	background-repeat: no-repeat;
+	background-size: clamp(18rem, 50vw, 44rem) auto;
+}
+.fern-left {
+	background-image: url("../img/fern-left-dark.svg?v=4");
+	background-position: left -4rem top calc(22% + var(--fern-y, 0) * 0.25rem);
+}
+.fern-right,
+#footer {
+	background-image: url("../img/fern-right-dark.svg?v=4");
+	background-position: right -4rem top calc(22% + var(--fern-y, 0) * 0.25rem);
+}
+.fern-left[data-surface="brand"] {
+	background-image: url("../img/fern-left-light.svg?v=2");
+}
+.fern-right[data-surface="brand"] {
+	background-image: url("../img/fern-right-light.svg?v=2");
+}
+#footer {
+	background-image: url("../img/fern-right-footer.svg?v=1");
+}
+
+/* Grain: a fine paper-like noise over a section's colour. Add the class grain
+   through Additional CSS class. Dark speckle on light sections, light speckle on
+   dark ones, and it combines with fern-left and fern-right. */
+.grain {
+	background-image: url("../img/grain-dark.svg?v=2");
+	background-size: 240px;
+}
+.grain[data-surface="brand"] {
+	background-image: url("../img/grain-light.svg?v=2");
+}
+.grain:is(.fern-left, .fern-right) {
+	background-size: clamp(18rem, 50vw, 44rem) auto, 240px;
+	background-repeat: no-repeat, repeat;
+}
+.grain.fern-left {
+	background-image: url("../img/fern-left-dark.svg?v=4"), url("../img/grain-dark.svg?v=2");
+	background-position: left -4rem top calc(22% + var(--fern-y, 0) * 0.25rem), 0 0;
+}
+.grain.fern-right {
+	background-image: url("../img/fern-right-dark.svg?v=4"), url("../img/grain-dark.svg?v=2");
+	background-position: right -4rem top calc(22% + var(--fern-y, 0) * 0.25rem), 0 0;
+}
+.grain.fern-left[data-surface="brand"] {
+	background-image: url("../img/fern-left-light.svg?v=2"), url("../img/grain-light.svg?v=2");
+}
+.grain.fern-right[data-surface="brand"] {
+	background-image: url("../img/fern-right-light.svg?v=2"), url("../img/grain-light.svg?v=2");
+}
+
+/* Both sides: one fern from the left near the top, one from the right near the bottom. */
+.fern-both {
+	background-image: url("../img/fern-left-dark.svg?v=4"), url("../img/fern-right-dark.svg?v=4");
+	background-repeat: no-repeat;
+	background-size: clamp(18rem, 50vw, 44rem) auto, clamp(18rem, 50vw, 44rem) auto;
+	background-position: left -4rem top calc(5rem + var(--fern-y, 0) * 0.25rem), right -4rem bottom calc(var(--edge-height) + var(--edge-overlap) + 2rem - var(--fern-y, 0) * 0.25rem);
+}
+.fern-both[data-surface="brand"] {
+	background-image: url("../img/fern-left-light.svg?v=2"), url("../img/fern-right-light.svg?v=2");
+}
+
+/* The brush edges are separate layers painted in the flat surface colour, so they
+   need the grain too, or the edge looks smoother than the panel it belongs to. */
+.grain.brush-top::before,
+.grain.brush-edge::after {
+	background-image: url("../img/grain-dark.svg?v=2");
+	background-size: 240px;
+}
+.grain[data-surface="brand"].brush-top::before,
+.grain[data-surface="brand"].brush-edge::after {
+	background-image: url("../img/grain-light.svg?v=2");
+}

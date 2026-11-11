@@ -1,0 +1,165 @@
+.hikes-list__month {
+	margin-top: var(--space-5);
+
+	& > h3 {
+		margin: 0 0 var(--space-2);
+		padding-bottom: var(--space-2);
+		border-bottom: 2px solid var(--col-brand-line);
+		font-family: var(--font-family-base);
+		font-size: var(--fs-lead);
+		font-weight: var(--fw-700);
+		letter-spacing: 0;
+	}
+}
+
+.hikes-list__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* One hike per row: the date, the details, then price and availability. The
+   title's link is stretched over the whole row. */
+.hikes-list__item {
+	position: relative;
+	display: grid;
+	grid-template-columns: 4.5rem 1fr;
+	gap: var(--space-2) var(--space-4);
+	align-items: start;
+	max-width: none;
+	padding-block: var(--space-4);
+	border-bottom: 1px solid var(--col-brand-line);
+
+	&:has(a:focus-visible) {
+		outline: 3px solid var(--col-accent);
+		outline-offset: -3px;
+	}
+	&:hover .hikes-list__link {
+		color: var(--col-accent-text);
+	}
+	&[data-status="sold-out"] {
+		opacity: 0.7;
+	}
+}
+
+.hikes-list__date {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	line-height: 1;
+	text-align: center;
+}
+.hikes-list__dow,
+.hikes-list__mon {
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+.hikes-list__day {
+	margin-block: 0.1em 0.05em;
+	font-family: var(--font-family-display);
+	font-size: 3.25rem;
+	color: var(--col-accent-text);
+}
+
+.hikes-list__body {
+	& h4 {
+		margin: 0 0 0.2em;
+		font-size: var(--fs-lead);
+		line-height: 1.25;
+	}
+	& p {
+		margin: 0;
+	}
+}
+.hikes-list__link {
+	color: inherit;
+	text-decoration: none;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+	}
+	&:hover {
+		text-decoration: none;
+	}
+	&:focus-visible {
+		outline: none;
+	}
+}
+.hikes-list__meta {
+	font-size: var(--fs-small);
+	color: var(--col-brand-mid);
+}
+.hikes-list__desc {
+	margin-top: var(--space-1);
+}
+
+.hikes-list__side {
+	grid-column: 2;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2) var(--space-3);
+}
+.hikes-list__price {
+	font-weight: var(--fw-700);
+}
+.hikes-list__tag {
+	padding: 0.2em 0.8em;
+	border-radius: 999px;
+	background: var(--col-wash);
+	font-size: var(--fs-small);
+	font-weight: var(--fw-700);
+}
+.hikes-list__tag--sold {
+	background: var(--col-ink);
+	color: var(--col-white);
+}
+
+.hikes-list__more {
+	margin-top: var(--space-5);
+}
+
+/* Each hike's featured photo, in the brush mask, on wider screens only. */
+.hikes-list__thumb {
+	display: none;
+}
+
+@media (min-width: 700px) {
+	.hikes-list__item {
+		grid-template-columns: 4.5rem 1fr auto;
+		align-items: center;
+	}
+	.hikes-list--images .hikes-list__item {
+		grid-template-columns: 4.5rem 9rem 1fr auto;
+	}
+	.hikes-list--images .hikes-list__thumb {
+		display: block;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+
+		& img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: scale 0.5s ease;
+		}
+	}
+	.hikes-list--images .hikes-list__item:hover .hikes-list__thumb img {
+		scale: 1.06;
+	}
+	.hikes-list--images .hikes-list__side {
+		grid-column: 4;
+	}
+	.hikes-list__side {
+		grid-column: 3;
+		flex-direction: column;
+		align-items: flex-end;
+		min-width: 7rem;
+	}
+}

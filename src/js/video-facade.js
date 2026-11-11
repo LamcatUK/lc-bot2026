@@ -39,6 +39,10 @@ function buildModal() {
 
 	dialog.addEventListener('close', () => {
 		inner.innerHTML = '';
+		// Lenis was stopped while the pop-out was open.
+		if (window.lcLenis) {
+			window.lcLenis.start();
+		}
 		if (dialog.opener && document.contains(dialog.opener)) {
 			dialog.opener.focus();
 		}
@@ -109,6 +113,10 @@ export function initVideoFacades() {
 			modal.setAttribute('aria-label', facade.getAttribute('data-title') || 'Video');
 			modal.opener = facade;
 			modal.showModal();
+			// Lenis would keep scrolling the page behind the pop-out.
+			if (window.lcLenis) {
+				window.lcLenis.stop();
+			}
 			return;
 		}
 

@@ -21,7 +21,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				fields={ [
 					{ name: 'image', label: __( 'Image', 'lc-bot2026' ), type: 'image' },
 					{ name: 'title', label: __( 'Title', 'lc-bot2026' ), type: 'text' },
-					{ name: 'link', label: __( 'Link', 'lc-bot2026' ), type: 'link' },
+					{ name: 'linkUrl', label: __( 'Link (page address)', 'lc-bot2026' ), type: 'text' },
 				] }
 				emptyRow={ { image: 0, imageUrl: '', title: '', linkText: '', linkUrl: '' } }
 			/>

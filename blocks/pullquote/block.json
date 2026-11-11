@@ -12,7 +12,10 @@
 		"spaceBottom": { "type": "string", "default": "normal" },
 		"title": { "type": "string", "default": "" },
 		"quotes": { "type": "array", "default": [] },
-		"surface": { "type": "string", "default": "surface" }
+		"surface": { "type": "string", "default": "surface" },
+		"imageId": { "type": "number", "default": 0 },
+		"imageUrl": { "type": "string", "default": "" },
+		"imageAlt": { "type": "string", "default": "" }
 	},
 	"supports": { "anchor": true, "className": true, "align": false },
 	"editorScript": "file:./build/index.js",

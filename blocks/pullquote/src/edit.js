@@ -1,11 +1,11 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps } from '@wordpress/block-editor';
-import { TextControl, SelectControl, ToggleControl } from '@wordpress/components';
+import { useBlockProps, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
+import { Button, TextControl, SelectControl, ToggleControl } from '@wordpress/components';
 import EditorBlockShell from '../../_shared/EditorBlockShell';
 import RepeaterField from '../../_shared/RepeaterField';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
-	const { brushTop, spaceTop, spaceBottom, title, quotes, surface } = attributes;
+	const { brushTop, spaceTop, spaceBottom, title, quotes, surface, imageId, imageUrl, imageAlt } = attributes;
 	const blockProps = useBlockProps( { className: 'container lc-bot2026-editor-block' } );
 	const spaceOptions = [ { value: 'normal', label: __( 'Normal', 'lc-bot2026' ) }, { value: 'small', label: __( 'Small', 'lc-bot2026' ) }, { value: 'none', label: __( 'None', 'lc-bot2026' ) } ];
 
@@ -25,6 +25,23 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				] }
 				emptyRow={ { quote: '', name: '', detail: '' } }
 			/>
+			<div className="lc-bot2026-editor-field">
+				<label className="lc-bot2026-editor-field__label">{ __( 'Background photo (optional, makes the block dark with a drifting photo)', 'lc-bot2026' ) }</label>
+				<MediaUploadCheck>
+					<MediaUpload
+						onSelect={ ( m ) => setAttributes( { imageId: m.id, imageUrl: m.url, imageAlt: m.alt || '' } ) }
+						allowedTypes={ [ 'image' ] }
+						value={ imageId }
+						render={ ( { open } ) => (
+							<div className="lc-bot2026-editor-field__control">
+								{ imageUrl && <img src={ imageUrl } alt={ imageAlt } style={ { maxWidth: '200px', display: 'block', marginBottom: '8px' } } /> }
+								<Button variant="secondary" onClick={ open }>{ imageUrl ? __( 'Replace image', 'lc-bot2026' ) : __( 'Select image', 'lc-bot2026' ) }</Button>
+								{ imageUrl && <Button variant="link" isDestructive onClick={ () => setAttributes( { imageId: 0, imageUrl: '', imageAlt: '' } ) }>{ __( 'Remove', 'lc-bot2026' ) }</Button> }
+							</div>
+						) }
+					/>
+				</MediaUploadCheck>
+			</div>
 			<SelectControl label={ __( 'Surface', 'lc-bot2026' ) } value={ surface } options={ [ { value: 'surface', label: 'Page (light)' }, { value: 'tint', label: 'Tint' }, { value: 'soft', label: 'Soft accent' }, { value: 'brand', label: 'Brand (dark)' } ] } onChange={ ( v ) => setAttributes( { surface: v } ) } />
 			<div style={ { display: 'flex', gap: '12px' } }>
 				<div style={ { flex: '1 1 0' } }><SelectControl label={ __( 'Space above', 'lc-bot2026' ) } value={ spaceTop || 'normal' } options={ spaceOptions } onChange={ ( v ) => setAttributes( { spaceTop: v } ) } /></div>

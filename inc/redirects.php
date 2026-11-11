@@ -3,8 +3,8 @@
  * 301 redirects from the old backontrack.live structure to the 2026 site.
  *
  * A plain map rather than a plugin: the list is short and fixed. Blog posts
- * keep their /blog/{slug}/ URLs, so they need no entries. Fitness targets
- * point at /fitness/ until the client's fitness sitemap is supplied.
+ * keep their /blog/{slug}/ URLs, so they need no entries. Fitness pages that
+ * have a new page point at it; the rest (nutrition, courses) go to /fitness/.
  * Mirrored in the "Redirects" tab of the BOT 2026 inventory sheet.
  *
  * @package lc-bot2026
@@ -30,13 +30,13 @@ function lc_bot2026_redirect_rules() {
 			'/in-sync-with-nature'       => '/nature-connected/',
 			'/giving-back-to-nature'     => '/nature-connected/',
 			'/blogs'                     => '/hiking-tips/blogs-news/',
-			'/fitness-classes'           => '/fitness/',
+			'/fitness-classes'           => '/fitness/classes/',
 			'/schedule'                  => '/fitness/',
-			'/book/fitness-packages'     => '/fitness/',
-			'/personal-training'         => '/fitness/',
-			'/running'                   => '/fitness/',
+			'/book/fitness-packages'     => '/fitness/classes/',
+			'/personal-training'         => '/fitness/personal-training/',
+			'/running'                   => '/fitness/running/',
 			'/nutrition'                 => '/fitness/',
-			'/shop'                      => 'https://goteamup.com/p/4093966-back-on-track/',
+			'/shop'                      => '/hikes/',
 			'/store'                     => '/',
 			'/newsletter'                => '/contact/',
 			'/download'                  => '/',

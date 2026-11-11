@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "lc-bot2026/hikes-list",
+	"title": "Upcoming Hikes",
+	"category": "lc-bot2026",
+	"icon": "calendar-alt",
+	"description": "Upcoming hikes booked with FooEvents, soonest first, grouped by month. Optionally one category.",
+	"attributes": {
+		"brushTop": { "type": "boolean", "default": false },
+		"spaceTop": { "type": "string", "default": "normal" },
+		"spaceBottom": { "type": "string", "default": "normal" },
+		"title": { "type": "string", "default": "Upcoming hikes" },
+		"category": { "type": "string", "default": "" },
+		"count": { "type": "number", "default": 0 },
+		"seeAllText": { "type": "string", "default": "" },
+		"seeAllUrl": { "type": "string", "default": "" },
+		"surface": { "type": "string", "default": "surface" },
+		"showImages": { "type": "boolean", "default": true }
+	},
+	"supports": { "anchor": true, "className": true, "align": false },
+	"editorScript": "file:./build/index.js",
+	"render": "file:./render.php"
+}

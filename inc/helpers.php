@@ -150,3 +150,67 @@ function lc_bot2026_section_extras( $attributes ) {
 	}
 	return $out;
 }
+
+/**
+ * Breadcrumb trail for the current page, without the page itself (the hero
+ * heading already says where you are): Home, then the ancestors.
+ *
+ * Pages follow their parents. A hike follows Hikes and its category page, a blog
+ * post follows Hiking Tips and Blogs and News (or Hiking Guides).
+ *
+ * @return array<int,array{label:string,url:string}> Empty on the home page.
+ */
+function lc_bot2026_breadcrumbs() {
+	if ( is_front_page() ) {
+		return array();
+	}
+	$crumbs = array( array( 'label' => 'Home', 'url' => home_url( '/' ) ) );
+	$add    = static function ( $page ) use ( &$crumbs ) {
+		if ( $page ) {
+			$crumbs[] = array( 'label' => get_the_title( $page ), 'url' => get_permalink( $page ) );
+		}
+	};
+
+	if ( is_singular( 'product' ) ) {
+		$add( get_page_by_path( 'hikes' ) );
+		$cats = get_the_terms( get_the_ID(), 'product_cat' );
+		$cat  = ( $cats && ! is_wp_error( $cats ) ) ? $cats[0] : null;
+		if ( $cat && 'uncategorized' !== $cat->slug ) {
+			$add( get_page_by_path( 'hikes/' . $cat->slug ) );
+		}
+	} elseif ( is_singular( 'post' ) ) {
+		$add( get_page_by_path( 'hiking-tips' ) );
+		$guide = has_term( 'hiking-guides', 'category' );
+		$add( get_page_by_path( 'hiking-tips/' . ( $guide ? 'hiking-guides' : 'blogs-news' ) ) );
+	} elseif ( is_page() ) {
+		foreach ( array_reverse( get_post_ancestors( get_the_ID() ) ) as $ancestor ) {
+			$add( get_post( $ancestor ) );
+		}
+	}
+
+	return count( $crumbs ) > 1 || is_page() || is_singular() ? $crumbs : array();
+}
+
+/**
+ * Links between the fitness pages: the Fitness overview and its child pages. Shown
+ * in the hero of each of them, since they are not in the main menu. Empty for
+ * every other page.
+ *
+ * @return array<int,array{label:string,url:string,current:bool}>
+ */
+function lc_bot2026_fitness_subnav() {
+	$root = get_page_by_path( 'fitness' );
+	if ( ! $root || ! is_page() ) {
+		return array();
+	}
+	$here = get_queried_object_id();
+	if ( $here !== $root->ID && ! in_array( $root->ID, get_post_ancestors( $here ), true ) ) {
+		return array();
+	}
+	$links = array( array( 'label' => 'Fitness', 'url' => get_permalink( $root ), 'current' => $here === $root->ID ) );
+	$kids  = get_pages( array( 'parent' => $root->ID, 'sort_column' => 'menu_order,post_title' ) );
+	foreach ( $kids as $kid ) {
+		$links[] = array( 'label' => get_the_title( $kid ), 'url' => get_permalink( $kid ), 'current' => $here === $kid->ID );
+	}
+	return count( $links ) > 1 ? $links : array();
+}

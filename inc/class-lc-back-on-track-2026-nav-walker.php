@@ -27,6 +27,14 @@ if ( ! class_exists( 'LC_Back_On_Track_2026_Nav_Walker' ) ) {
 		protected $current_submenu_id = '';
 
 		/**
+		 * The parent item being opened, so its own page can be the first
+		 * link in its dropdown (the parent itself is only a toggle button).
+		 *
+		 * @var WP_Post|null
+		 */
+		protected $current_parent = null;
+
+		/**
 		 * Starts the list before the elements are added.
 		 *
 		 * @param string   $output Passed by reference.
@@ -36,6 +44,14 @@ if ( ! class_exists( 'LC_Back_On_Track_2026_Nav_Walker' ) ) {
 		 */
 		public function start_lvl( &$output, $depth = 0, $args = null ) {
 			$output .= '<ul class="dropdown-menu" id="' . esc_attr( $this->current_submenu_id ) . '">';
+
+			// The parent is a toggle, not a link, so give its own page a way in:
+			// "All hikes", "All hiking tips".
+			if ( 0 === $depth && $this->current_parent && $this->current_parent->url ) {
+				$is_here = in_array( 'current-menu-item', $this->current_parent->classes, true );
+				$label   = sprintf( /* translators: %s: the menu item's name, lower-cased. */ __( 'All %s', 'lc-bot2026' ), mb_strtolower( $this->current_parent->title ) );
+				$output .= '<li class="nav-item"><a class="nav-link' . ( $is_here ? ' active' : '' ) . '" href="' . esc_url( $this->current_parent->url ) . '"' . ( $is_here ? ' aria-current="page"' : '' ) . '>' . esc_html( $label ) . '</a></li>';
+			}
 		}
 
 		/**
@@ -74,6 +90,7 @@ if ( ! class_exists( 'LC_Back_On_Track_2026_Nav_Walker' ) ) {
 			if ( $has_children ) {
 				// Dropdown parents never navigate — the whole item is the toggle.
 				$this->current_submenu_id = 'dropdown-' . $item->ID;
+				$this->current_parent     = $item;
 				$output                  .= '<button type="button" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="' . esc_attr( $this->current_submenu_id ) . '">';
 				$output                  .= '<span>' . esc_html( $item->title ) . '</span>';
 				$output                  .= '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" /></svg>';

@@ -116,3 +116,23 @@
 	top: calc(-1 * var(--nav-height) - 1rem);
 	visibility: hidden;
 }
+
+
+/* No sideways scrolling on a phone. Decorative things (parallax photos, the faint
+   brush behind the contact form) can reach past the edge; clip them at the page
+   rather than let them widen it. Clip, not hidden, so sticky and brush edges
+   that overhang vertically still work. */
+main,
+#footer {
+	overflow-x: clip;
+}
+
+/* Long links and wide tables (the legal pages) must not push the page wider. */
+main a {
+	overflow-wrap: anywhere;
+}
+main table:not(.shop_table):not(.woocommerce-table) {
+	display: block;
+	max-width: 100%;
+	overflow-x: auto;
+}

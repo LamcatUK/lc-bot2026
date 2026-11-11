@@ -120,8 +120,8 @@
 		inset: -0.2em -0.4em;
 		z-index: -1;
 		background: var(--col-wash);
-		-webkit-mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
-		mask: url("../img/brush/brush-pill.svg") center / 100% 100% no-repeat;
+		-webkit-mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
+		mask: url("../img/brush/brush-pill.svg?v=2") center / 100% 100% no-repeat;
 	}
 }
 

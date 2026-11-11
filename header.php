@@ -24,13 +24,15 @@
 			<span class="navbar-logo" role="img" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"></span>
 		</a>
 
+		<?php echo function_exists( 'lc_bot2026_basket_link' ) ? lc_bot2026_basket_link() : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built and escaped in the function. ?>
+
 		<button class="navbar-toggler" type="button" aria-expanded="false" aria-controls="primary-menu" aria-label="Toggle navigation">
 			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 				<path d="M2 5h16M2 10h16M2 15h16" />
 			</svg>
 		</button>
 
-		<div class="navbar-collapse" id="primary-menu">
+		<div class="navbar-collapse" id="primary-menu" data-lenis-prevent>
 			<?php
 			wp_nav_menu(
 				array(

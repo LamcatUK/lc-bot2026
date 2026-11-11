@@ -41,3 +41,83 @@ body.theme-fitness .page-hero--image .page-hero__media::after {
 .page-hero.section.brush-edge {
 	padding-bottom: calc(var(--section-pad) * 0.5 + var(--edge-overlap) + clamp(1.5rem, 5vw, 4.5rem));
 }
+
+/* Hike titles are long: let them run wider than the usual 14ch. */
+body.single-product .page-hero h1 {
+	max-width: 26ch;
+}
+
+/* Breadcrumbs above the title: small, light, wrapping, with a chevron between. */
+.breadcrumbs {
+	margin-bottom: var(--space-3);
+	font-size: 0.875rem;
+
+	& ol {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25em 0.6em;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	& li {
+		max-width: none;
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		margin: 0;
+
+		&:not(:last-child)::after {
+			content: "";
+			width: 0.4em;
+			height: 0.4em;
+			border: solid currentcolor;
+			border-width: 2px 2px 0 0;
+			opacity: 0.6;
+			rotate: 45deg;
+		}
+	}
+	& a {
+		color: inherit;
+		opacity: 0.85;
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			opacity: 1;
+			text-decoration: underline;
+		}
+	}
+}
+
+/* Links between the fitness pages, along the bottom of the hero copy. */
+.page-hero__subnav {
+	margin-top: var(--space-4);
+
+	& ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em 1.5em;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	& li {
+		max-width: none;
+		margin: 0;
+	}
+	& a {
+		display: inline-block;
+		padding-block: 0.2em;
+		border-bottom: 2px solid transparent;
+		color: inherit;
+		font-weight: 600;
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible,
+		&[aria-current="page"] {
+			border-bottom-color: var(--col-accent);
+		}
+	}
+}

@@ -22,6 +22,16 @@ $classes   = 'page-hero section' . ( ! empty( $attributes['brushEdge'] ) ? ' bru
 		<div class="page-hero__media" aria-hidden="true"><?php lc_bot2026_image( $image_id, $image_url, '', 'full', 'eager' ); ?></div>
 	<?php } ?>
 	<div class="container page-hero__inner">
+		<?php $crumbs = lc_bot2026_breadcrumbs(); ?>
+		<?php if ( $crumbs ) { ?>
+			<nav class="breadcrumbs" aria-label="Breadcrumb">
+				<ol>
+					<?php foreach ( $crumbs as $crumb ) { ?>
+						<li><a href="<?php echo esc_url( $crumb['url'] ); ?>"><?php echo esc_html( $crumb['label'] ); ?></a></li>
+					<?php } ?>
+				</ol>
+			</nav>
+		<?php } ?>
 		<?php if ( ! empty( $attributes['pillText'] ) ) { ?>
 			<p class="pill"><?php echo esc_html( $attributes['pillText'] ); ?></p>
 		<?php } ?>
@@ -30,5 +40,15 @@ $classes   = 'page-hero section' . ( ! empty( $attributes['brushEdge'] ) ? ' bru
 			<div class="lead"><?php echo wp_kses_post( $attributes['intro'] ); ?></div>
 		<?php } ?>
 		<?php lc_bot2026_link( $attributes['ctaText'] ?? '', $attributes['ctaUrl'] ?? '', 'btn' ); ?>
+		<?php $subnav = lc_bot2026_fitness_subnav(); ?>
+		<?php if ( $subnav ) { ?>
+			<nav class="page-hero__subnav" aria-label="Fitness">
+				<ul>
+					<?php foreach ( $subnav as $link ) { ?>
+						<li><a href="<?php echo esc_url( $link['url'] ); ?>"<?php echo $link['current'] ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $link['label'] ); ?></a></li>
+					<?php } ?>
+				</ul>
+			</nav>
+		<?php } ?>
 	</div>
 </section>

@@ -1,0 +1,50 @@
+.feature-columns .lead {
+	margin-top: var(--space-2);
+}
+
+.feature-columns__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+	gap: var(--space-5) var(--space-5);
+	margin: var(--space-5) 0 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: step;
+}
+
+/* No boxes: a short rule, the title, the words */
+.feature-columns__item {
+	max-width: none;
+	padding-top: var(--space-3);
+	border-top: 3px solid var(--col-accent);
+
+	& h3 {
+		margin: 0 0 var(--space-2);
+		font-size: var(--fs-h3);
+	}
+	& p {
+		margin: 0;
+	}
+}
+
+/* Steps: a big script numeral above each title */
+.feature-columns__list--numbered .feature-columns__item {
+	counter-increment: step;
+
+	&::before {
+		content: counter(step);
+		display: block;
+		margin-bottom: 0.1em;
+		font-family: var(--font-family-display);
+		font-size: 4rem;
+		line-height: 1;
+		color: var(--col-accent-text);
+	}
+}
+[data-surface="brand"] .feature-columns__list--numbered .feature-columns__item::before {
+	color: var(--col-accent);
+}
+
+.feature-columns__link {
+	font-weight: 600;
+}
