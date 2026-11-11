@@ -118,6 +118,7 @@ body.single-product .page-hero h1 {
 		&:focus-visible,
 		&[aria-current="page"] {
 			border-bottom-color: var(--col-accent);
+			text-decoration: none;
 		}
 	}
 }

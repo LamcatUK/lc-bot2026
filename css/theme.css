@@ -3395,6 +3395,7 @@ body.single-product .page-hero h1 {
 	}
 :is(.page-hero__subnav a):hover,:is(.page-hero__subnav a):focus-visible,[aria-current="page"]:is(.page-hero__subnav a) {
 			border-bottom-color: var(--col-accent);
+			text-decoration: none;
 		}
 
 /* --- src/blocks/post.css --- */
