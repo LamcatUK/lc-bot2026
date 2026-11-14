@@ -63,6 +63,7 @@ function lc_bot2026_register_settings_page() {
 
 	register_setting( 'lc_bot2026_settings', LC_BOT2026_SETTINGS_OPTION );
 
+	add_settings_section( 'lc_bot2026_site', 'Site', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'lc_bot2026_general', 'General', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'lc_bot2026_social', 'Social', '__return_false', 'theme-general-settings' );
 	add_settings_section( 'lc_bot2026_tracking', 'Tracking & Verification', '__return_false', 'theme-general-settings' );
@@ -72,6 +73,23 @@ function lc_bot2026_register_settings_page() {
 	add_settings_section( 'lc_bot2026_accreditations', 'Accreditations', '__return_false', 'theme-general-settings' );
 
 	$fields = array(
+		'site_mode'                 => array(
+			'label'       => 'Site type',
+			'type'        => 'select',
+			'section'     => 'lc_bot2026_site',
+			'options'     => array(
+				'hiking'  => 'Hiking (green)',
+				'fitness' => 'Fitness (navy and pink)',
+			),
+			'description' => 'Sets the colour scheme for the whole site: green for Hiking, navy and pink for Fitness.',
+		),
+		'sister_site_url'           => array(
+			'label'       => 'Other site address',
+			'type'        => 'url',
+			'section'     => 'lc_bot2026_site',
+			'placeholder' => 'https://...',
+			'description' => 'The address of the other site (Fitness from the Hiking site, and the reverse). Old pages that moved to the other site redirect there. Leave blank to send them to the home page of this site.',
+		),
 		'email'                     => array(
 			'label'   => 'Email',
 			'type'    => 'email',
@@ -293,6 +311,25 @@ function lc_bot2026_render_settings_field( $args ) {
 	}
 
 	$value = lc_bot2026_get_setting( $args['key'] );
+
+	if ( 'select' === $args['type'] ) {
+		?>
+		<select
+			id="<?php echo esc_attr( $args['key'] ); ?>"
+			name="<?php echo esc_attr( LC_BOT2026_SETTINGS_OPTION ); ?>[<?php echo esc_attr( $args['key'] ); ?>]"
+		>
+			<?php foreach ( $args['options'] as $option => $label ) : ?>
+				<option value="<?php echo esc_attr( $option ); ?>" <?php selected( $value ?: array_key_first( $args['options'] ), $option ); ?>><?php echo esc_html( $label ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+		if ( ! empty( $args['description'] ) ) {
+			?>
+			<p class="description"><?php echo esc_html( $args['description'] ); ?></p>
+			<?php
+		}
+		return;
+	}
 	?>
 	<input
 		type="<?php echo esc_attr( $args['type'] ); ?>"

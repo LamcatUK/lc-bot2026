@@ -68,14 +68,24 @@ function lc_bot2026_surface( $value, $default = 'surface' ) {
 }
 
 /**
- * Add a fitness theme class to the body for anything under /fitness/.
+ * Whether this install is the Fitness site. Hiking and Fitness are separate
+ * WordPress sites sharing this theme; the Site-Wide Settings "Site type" picks
+ * the colour scheme for the whole site.
+ *
+ * @return bool
+ */
+function lc_bot2026_is_fitness_site() {
+	return 'fitness' === lc_bot2026_get_setting( 'site_mode', 'hiking' );
+}
+
+/**
+ * Fitness colour scheme for every page of the Fitness site.
  *
  * @param string[] $classes Body classes.
  * @return string[]
  */
 function lc_bot2026_fitness_body_class( $classes ) {
-	$path = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH ) : '';
-	if ( $path && preg_match( '#^/fitness(/|$)#', $path ) ) {
+	if ( lc_bot2026_is_fitness_site() ) {
 		$classes[] = 'theme-fitness';
 	}
 	return $classes;
